@@ -1,0 +1,31 @@
+.show {
+  position: absolute;
+
+  right: 0;
+  background-color: transparent;
+}
+
+#p {
+  margin-bottom: 0;
+}
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.google,
+.fb {
+  background: transparent;
+  border: 2px solid #003e5b;
+
+  border-radius: 27px;
+  width: 130px;
+  height: 35px;
+}
+.fb {
+  margin-left: 10px;
+}
+#fb,
+#google {
+  margin-left: 5px;
+}

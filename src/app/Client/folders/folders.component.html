@@ -1,0 +1,196 @@
+<div class="Main-container">
+  <h3>Folders ({{ dataTableList.length }})</h3>
+  <div class="display-icons">
+    <button
+      [ngStyle]="{
+        color: showGridView === true ? 'rgb(17, 17, 236)' : 'rgb(119 119 119)'
+      }"
+      (click)="GridView()"
+    >
+      <img src="assets/Images/grid-fill.svg" />
+    </button>
+    <button
+      [ngStyle]="{
+        color: showListView === true ? 'rgb(17, 17, 236)' : 'rgb(119 119 119)'
+      }"
+      (click)="ListView()">
+      <i class="fa-solid fa-list"></i>
+    </button>
+  </div>
+  <div *ngIf="showGridView" class="row grid-view">
+    <div
+      class="folder new-folder"
+      data-bs-toggle="modal"
+      data-bs-target="#exampleModal"
+      style="cursor: pointer"
+    >
+      <button class="custom-btn">
+        <div class="add-folder">
+          <i class="fa-solid fa-plus"></i> New Folder
+        </div>
+      </button>
+    </div>
+    <div *ngFor="let obj of dataTableList"  class="folder"  [ngStyle]="{ 'background-color': obj.Color }" >
+      <a  style="color:#003e5b"  (click)="GotoFolderDoc(obj)" >
+        <div class="ellipsis">
+          <i class="fa-solid fa-ellipsis-vertical"></i>
+        </div>
+        <div class="d-flex flex-column justify-content-between">
+          <div class="number d-flex align-items-center justify-content-center">
+            <h6 class="font-sm m-0">{{ obj.docCount }}</h6>
+          </div>
+  
+          <div class="title">{{ obj.Name }}</div>
+          <h5 class="date">{{ obj.CreatedOn | date: "mediumDate" }}</h5>
+        </div>
+      </a>
+    
+    </div>
+  </div>
+
+  <div *ngIf="showListView" class="list-view">
+    <button
+      class="add-new-folder my-3"
+      data-bs-toggle="modal"
+      data-bs-target="#exampleModal"
+    >
+      <span>+ New Folder</span>
+    </button>
+    <table class="table mt-4">
+      <thead>
+        <tr class="table-tr">
+          <th class="padding" scope="col">Folder Name</th>
+          <th class="padding" scope="col">Document</th>
+          <th class="padding" scope="col">Last Updated</th>
+          <th class="padding" scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let obj of dataTableList" class="border-color">
+          <th scope="row">
+            <div class="d-flex title-padding">
+              <div
+                class="folder-list-view"
+                [ngStyle]="{ 'background-color': obj.Color }"
+              ></div>
+              <span class="main-color">{{ obj.Name }}</span>
+            </div>
+          </th>
+
+          <td class="td-padding">{{ obj.docCount }}</td>
+          <td class="td-padding">{{ obj.CreatedOn | date: "mediumDate" }}</td>
+
+          <td class="td-padding">
+            <i
+              class="fa-solid fa-ellipsis-vertical"
+              style="margin-right: 10px"
+            ></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div
+    class="modal fade"
+    id="exampleModal"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form
+          name="form"
+          (ngSubmit)="f.form.valid && CreateFolder(f)"
+          #f="ngForm"
+          novalidate
+        >
+          <div class="modal-header modal-border">
+            <h5 class="modal-title">New Folder</h5>
+            <div class="ms-4">
+              <input
+                class="ms-1 form-check-input input1"
+                type="radio"
+                name="color"
+                [(ngModel)]="form.color"
+                #color="ngModel"
+                value="#BEEAFF"
+              />
+              <input
+                class="ms-1 form-check-input input2"
+                type="radio"
+                name="color"
+                [(ngModel)]="form.color"
+                #color="ngModel"
+                value="#F44336"
+              />
+              <input
+                class="ms-1 form-check-input input3"
+                type="radio"
+                name="color"
+                [(ngModel)]="form.color"
+                #color="ngModel"
+                value="#FFBA33"
+              />
+              <input
+                class="ms-1 form-check-input input4"
+                type="radio"
+                name="color"
+                [(ngModel)]="form.color"
+                #color="ngModel"
+                value="#F44333"
+              />
+              <input
+                class="ms-1 form-check-input input5"
+                type="radio"
+                name="color"
+                [(ngModel)]="form.color"
+                #color="ngModel"
+                value="#36F4A2"
+              />
+            </div>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Folder Name (i.e. Home)"
+              name="Name"
+              required
+              [(ngModel)]="form.Name"
+              #Name="ngModel"
+            />
+            <div
+              class="alert alert-danger"
+              role="alert"
+              *ngIf="Name.errors && f.submitted"
+            >
+              Name is required!
+            </div>
+          </div>
+          <div class="d-flex justify-content-between mt-2 mb-2 p-2">
+            <div>
+              <button
+                type="button"
+                class="btn fontWeight custom-btn"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+            </div>
+            <div class="">
+              <button type="submit" class="btn fontWeight custom-btn">
+                Create
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+<div class="Main-container">
+  <div class="d-flex align-items-end">
+    <h3 id="h3">Saved Documents</h3>
+    <!-- <div class="greater-icon">
+      <img src="assets/icons/1.5x/right.png" />
+    </div>
+    <h3 id="h3">Health (2)</h3> -->
+  </div>
+  <p class="p-text">Tab the bookmark icon to save any important documents for quick access.</p>
+
+  <div class="row mt-5">
+    <div class="col-10 col-sm-8 col-md-5 col-lg-4" *ngFor="let i of dataTableList" >
+      <div class="margin-div">
+        <div class="expired-container b1" *ngIf="i.Status == 1">
+          <div class="title">
+            <h2 class="fontWeight">{{ i.DocName }}</h2>
+            <span class="icon">
+              <img src="assets/icons/1x/list.png" />
+              <i  class="fa-solid fa-share"  style="margin-left: 7px; margin-right: 7px" ></i>
+              <a style="cursor:pointer;" *ngIf="i.Isbookmark==true"  (click)="addBookmark(i.Id,false)"><i  class="fa-solid fa-bookmark"></i></a>
+              <a style="cursor:pointer;" *ngIf="i.Isbookmark==false" (click)="addBookmark(i.Id,true)"><i  class="far fa-bookmark"></i></a>
+              
+            </span>
+          </div>
+          <h3  class="date cl4">
+            {{ i.ExpiryDate | date : "mediumDate"}}
+          </h3>
+          <div class="description">Pending Renewal</div>
+          <div class="status">
+            <i class="fa-solid fa-clock"></i>
+            <h4> Active </h4>
+          </div>
+        </div>
+        <div class="expired-container b2" *ngIf="i.Status == 2">
+          <div class="title">
+            <h2 class="fontWeight">{{ i.DocName }}</h2>
+            <span class="icon">
+              <img src="assets/icons/1x/list.png" />
+              <i  class="fa-solid fa-share"  style="margin-left: 7px; margin-right: 7px" ></i>
+              <a style="cursor:pointer;" *ngIf="i.Isbookmark==true"  (click)="addBookmark(i.Id,false)"><i  class="fa-solid fa-bookmark"></i></a>
+              <a style="cursor:pointer;" *ngIf="i.Isbookmark==false" (click)="addBookmark(i.Id,true)"><i  class="far fa-bookmark"></i></a>
+              
+            </span>
+          </div>
+          <h3  class="date cl2-3">
+            {{ i.ExpiryDate | date : "mediumDate"}}
+          </h3>
+          <div class="description" >Renewal In-Progress</div>
+          <div class="status">
+            <i class="fa-solid fa-clock"></i>
+            <h4 id="h4">Expiring in {{i.DiffTotalDays}} days</h4>
+          </div>
+        </div>
+        <div class="expired-container b3" *ngIf="i.Status === 3">
+          <div class="title">
+            <h2 class="fontWeight">{{ i.DocName }}</h2>
+            <span class="icon">
+              <img src="assets/icons/1x/list.png" />
+              <i  class="fa-solid fa-share"  style="margin-left: 7px; margin-right: 7px" ></i>
+              <a style="cursor:pointer;" *ngIf="i.Isbookmark==true"  (click)="addBookmark(i.Id,false)"><i  class="fa-solid fa-bookmark"></i></a>
+              <a style="cursor:pointer;" *ngIf="i.Isbookmark==false" (click)="addBookmark(i.Id,true)"><i  class="far fa-bookmark"></i></a>
+              
+            </span>
+          </div>
+          <h3  class="date cl1">
+            {{ i.ExpiryDate | date : "mediumDate"}}
+          </h3>
+          <div class="description" >Renewal In-Progress</div>
+          <div class="status">
+            <i class="fa-solid fa-clock"></i>
+            <h4 id="h4">Expired {{i.DiffTotalDays}} days ago</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

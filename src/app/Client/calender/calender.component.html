@@ -1,0 +1,89 @@
+<div class="Main-container">
+  <div>
+    <h3 id="h3">Calendar</h3>
+  </div>
+
+  <div class="d-flex calendar">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-8">
+      <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+    </div>
+
+    <div class="col-12 col-sm-10 col-md-4 col-lg-4 ms-2">
+      <div class="conatiner-fluid calender-dashboard">
+        <div class="row d-flex flex-column">
+          <div class="d-flex" *ngFor="let i of docList">
+            <div class="col-md-1 col-lg-1">
+              <h6>{{ i.ExpiryDate | date: "MMM dd" }}</h6>
+            </div>
+            <div class="col-md-11 col-lg-11 ms-2">
+              <div class="expired-container b3" *ngIf="i.Status == 1">
+                <div class="title">
+                  <h2 class="fontWeight">{{ i.DocName }}</h2>
+                  <span class="icon">
+                    <img src="assets/icons/1x/list.png" />
+                    <i
+                      class="fa-solid fa-share"
+                      style="margin-left: 7px; margin-right: 7px"
+                    ></i>
+                    <i class="fa-solid fa-bookmark"></i>
+                  </span>
+                </div>
+                <h3 class="date cl3">
+                  {{ i.ExpiryDate | date: "mediumDate" }}
+                </h3>
+                <h5 class="text-start">Pending Renewal</h5>
+                <div class="status">
+                  <i class="fa-solid fa-clock"></i>
+                  <h4 id="h4">Active</h4>
+                </div>
+              </div>
+              <div class="expired-container b2" *ngIf="i.Status == 2">
+                <div class="title">
+                  <h2 class="fontWeight">{{ i.DocName }}</h2>
+                  <span class="icon">
+                    <img src="assets/icons/1x/list.png" />
+                    <i
+                      class="fa-solid fa-share"
+                      style="margin-left: 7px; margin-right: 7px"
+                    ></i>
+                    <i class="fa-solid fa-bookmark"></i>
+                  </span>
+                </div>
+                <h3 class="date cl2">
+                  {{ i.ExpiryDate | date: "mediumDate" }}
+                </h3>
+                <h5 class="text-start">Renewal In-Progress</h5>
+                <div class="status">
+                  <i class="fa-solid fa-clock"></i>
+                  <h4 id="h4">Expiring in {{ i.DiffTotalDays }} days</h4>
+                </div>
+              </div>
+              <div class="expired-container b1" *ngIf="i.Status == 3">
+                <div class="title">
+                  <h2 class="fontWeight">{{ i.DocName }}</h2>
+                  <span class="icon">
+                    <img src="assets/icons/1x/list.png" />
+                    <i
+                      class="fa-solid fa-share"
+                      style="margin-left: 7px; margin-right: 7px"
+                    ></i>
+                    <i class="fa-solid fa-bookmark"></i>
+                  </span>
+                </div>
+                <h3 class="date cl1">
+                  {{ i.ExpiryDate | date: "mediumDate" }}
+                </h3>
+                <h5 class="text-start">Renewal In-Progress</h5>
+                <div class="status">
+                  <i class="fa-solid fa-clock"></i>
+                  <h4 id="h4">Expired {{ i.DiffTotalDays }} days ago</h4>
+                </div>
+              </div>
+              <br />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

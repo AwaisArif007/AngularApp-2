@@ -1,0 +1,237 @@
+/* ************ Document-details ****************** */
+
+h3 {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+.greater-icon {
+  font-size: 15px;
+  margin: 5px 8px;
+  margin-bottom: 10px;
+  font-weight: normal;
+}
+.Document-details {
+  padding: 2rem 4rem;
+  background-color: #ffffff;
+}
+
+.input-action {
+  position: absolute;
+  right: 5px;
+  bottom: 10px;
+}
+
+.opacity {
+  opacity: 0.8;
+}
+.btn-check:focus + .btn,
+.btn:focus {
+  box-shadow: none;
+}
+.form-check-input:checked {
+  background-color: #003e5b;
+  border-color: #003e5b;
+  border: none;
+  box-shadow: none;
+}
+.form-switch .form-check-input {
+  box-shadow: none;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.form-switch {
+  padding-left: 0;
+}
+
+#notification-label {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #003e5b;
+  margin-top: 7px;
+}
+.light-color {
+  color: rgb(119, 119, 119);
+}
+.reminder {
+  margin-left: 8px;
+  color: rgb(119, 119, 119);
+}
+ul.no-bullets {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.upload-files {
+  border: dotted;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.btn-file {
+  position: relative;
+  overflow: hidden;
+  font-weight: bold;
+  color: #003e5b;
+  padding: 0;
+}
+.btn-file input[type="file"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  cursor: inherit;
+  display: block;
+}
+
+.preview-cancel-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4rem;
+}
+.preview-btn,
+.cancel-btn,
+.save-btn {
+  width: 140px;
+  height: 40px;
+
+  color: #003e5b;
+  font-weight: bold;
+  font-size: 1rem;
+
+  border-radius: 27px;
+  background: inherit;
+  border: 1px solid rgba(0, 62, 91);
+}
+.preview-btn {
+  margin-left: 10px;
+  background-color: #003e5b;
+  color: rgba(255, 255, 255);
+}
+.underline {
+  border-bottom: 2px solid rgb(119, 119, 119);
+  width: 35%;
+  opacity: 0.8;
+}
+.preview-title {
+  width: 30%;
+  margin: 0 10px;
+}
+.d-detail {
+  background-color: #ffffff;
+  width: 200px;
+  margin: 0 25px -35px;
+
+  position: relative;
+}
+.d-detail2 {
+  background-color: #ffffff;
+  width: 120px;
+  margin: 0 25px -20px;
+
+  position: relative;
+}
+.detail {
+  border: 1.5px solid rgb(233 225 225);
+  border-radius: 15px;
+  height: 100%;
+}
+.preview-container {
+  padding: 0 3rem;
+}
+.edit-document {
+  text-decoration: underline;
+  color: #003e5b;
+  font-weight: bold;
+  margin: 10px 0;
+}
+.inputLabel {
+  font-size: 19.2px;
+  color: rgb(119, 119, 119);
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+.inputValue {
+  font-size: 19.2px;
+  color: #003e5b;
+}
+.form-floating > .form-control:focus,
+.form-floating > .form-control:not(:placeholder-shown) {
+  padding-bottom: 0;
+}
+select {
+  background-color: inherit;
+}
+.username-input {
+  outline: none;
+}
+
+.select-action {
+  position: relative;
+  right: 35px;
+}
+.reminder-input1 {
+  width: 50px;
+}
+.reminder-input2 {
+  width: 160px;
+}
+label {
+  font-size: 18px;
+}
+
+.fileInput {
+  opacity: 0;
+}
+
+/* **** Create Folder Modal **** */
+
+.modal-content {
+  position: absolute;
+  top: 200px;
+  align-self: center;
+  width: 70%;
+  border-radius: 10px;
+  border: 0;
+}
+.modal-border {
+  border-bottom: none;
+}
+.modal-body > input {
+  outline: none;
+
+  box-shadow: none;
+}
+.input1,
+.input1:checked {
+  background-color: #beeaff !important;
+  color: #beeaff;
+  box-shadow: none;
+}
+.input2,
+.input2:checked {
+  background-color: #f44336 !important;
+  color: #f44336;
+  box-shadow: none;
+}
+.input3,
+.input3:checked {
+  background-color: #ffba33 !important;
+  color: #ffba33;
+  box-shadow: none;
+}
+.input4,
+.input4:checked {
+  background-color: rgb(244, 67, 51, 0.2) !important;
+  color: rgb(244, 67, 51, 0.2);
+  box-shadow: none;
+}
+.input5,
+.input5:checked {
+  background-color: #36f4a2 !important;
+  color: #36f4a2;
+  box-shadow: none;
+}

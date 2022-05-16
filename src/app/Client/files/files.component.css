@@ -1,0 +1,47 @@
+h3 {
+  font-weight: bold;
+  color: #003e5b;
+}
+.files {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.td-padding {
+  padding: 30px 10px;
+}
+.title-padding {
+  padding: 15px 0 15px 0;
+}
+.border-color {
+  border-bottom-color: rgb(119 119 119);
+  border-bottom: groove;
+  border-bottom-width: 2px;
+}
+.table-tr {
+  opacity: 0.7;
+}
+.padding {
+  padding: 10px 10px;
+}
+.action-padding {
+  padding: 20px 0;
+}
+.document {
+  text-decoration: underline;
+  font-weight: bold;
+  color: #003e5b;
+}
+.opacity {
+  opacity: 0.8;
+}
+.btn-check:focus + .btn,
+.btn:focus {
+  box-shadow: none;
+}
+.input-action {
+  position: absolute;
+  right: 5px;
+  bottom: 10px;
+}

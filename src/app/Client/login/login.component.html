@@ -1,0 +1,77 @@
+<header>
+  <div><img src="assets/logo/full logo.png" class="logo" /></div>
+</header>
+
+<div class="main-container">
+  <div class="form-container container col-9 col-sm-6 col-md-6 col-lg-4">
+    <form
+      name="form"
+      (ngSubmit)="myForm.form.valid && onSubmit()"
+      #myForm="ngForm"
+      novalidate
+    >
+      <h3 class="text-center mb-5 logintext">Login</h3>
+      <div class="form-floating mb-3">
+        <input
+          type="email"
+          class="form-control username-input"
+          id="floatingInput"
+          placeholder="name"
+          name="username"
+          required
+          [pattern]="emailPattern"
+          [(ngModel)]="SignINdata.userName"
+          #username="ngModel"
+        />
+        <label for="floatingInput" class="label">Username</label>
+        <!-- <small *ngIf="!username.valid && username.touched"
+          >Username is required</small
+        > -->
+        <div *ngIf="username.errors && username.touched">
+          <small *ngIf="username.errors['required']">Email is required.</small>
+          <small *ngIf="username.errors['pattern']">Email is not valid.</small>
+        </div>
+      </div>
+
+      <div class="form-floating mb-2 password-form">
+        <input
+          type="password"
+          class="form-control password-input"
+          id="floatingPassword"
+          placeholder="Password"
+          name="password"
+          required
+          [(ngModel)]="SignINdata.password"
+          #password="ngModel"
+          maxlength="10"
+        />
+        <label for="floatingPassword">Password</label>
+      </div>
+      <div class="mb-4">
+        <small *ngIf="password.errors && password.errors['required'] && password.touched">Password is required</small>
+        <small *ngIf="password.errors && password.errors['password'] && password.touched">Password should be valid</small>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <input class="form-check-input"  type="checkbox"  value=""   id="flexCheckDefault"  name="RememberMe"  [(ngModel)]="SignINdata.RememberMe" #RememberMe="ngModel"/>
+          <label class="form-check-label checkboxtext mx-1" for="flexCheckDefault">Remember Me</label>
+        </div>
+        <div class="col-md-6">
+          <a class="forgotbutton" routerLink="client/forget"> Forgot Password?</a>
+        </div>
+      </div>
+      
+      
+      <div>
+        <button class="loginbtn mb-3" type="submit" [disabled]="!myForm.valid">
+          Login
+        </button>
+        <p class="text-center">
+          Don't have an account?
+          <a class="signuptext" routerLink="client/Signup">Sign up</a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>

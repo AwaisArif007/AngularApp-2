@@ -1,0 +1,34 @@
+.Main-container {
+  background-color: #f8f8f8;
+  padding: 3rem;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+
+  min-height: 100vh;
+  color: #003e5b;
+}
+.grey-color {
+  color: #777777;
+}
+.fontWeight {
+  font-weight: bold;
+}
+.custom-btn {
+  background: transparent;
+  border: none;
+}
+.fontSize {
+  font-size: 1rem;
+}
+.font-sm {
+  font-size: 0.8rem;
+}
+.underline {
+  border-bottom: 2px solid rgb(119, 119, 119);
+  opacity: 0.1;
+}
+.main-color {
+  color: #003e5b;
+}
+::placeholder {
+  visibility: hidden;
+}

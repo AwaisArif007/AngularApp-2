@@ -1,0 +1,116 @@
+<header>
+  <div><img src="assets/logo/full logo.png" class="logo" /></div>
+</header>
+<div class="main-container">
+  <div class="form-container col-10 col-sm-6 col-md-5 col-lg-4">
+    <form
+      name="form"
+      (ngSubmit)="f.form.valid && onSubmit(f)"
+      #f="ngForm"
+      novalidate
+    >
+      <h3 class="text-center mb-5 logintext">Create Account</h3>
+      <div class="form-floating mb-3">
+        <input
+          type="text"
+          class="form-control password-input"
+          id="floatingInput"
+          name="name"
+          placeholder="name"
+          required
+          [(ngModel)]="Signupdata.name"
+          #name="ngModel"
+          maxlength="15"
+        />
+        <label for="floatingInput" class="label">Your Name</label>
+
+        <small *ngIf="!name.valid && name.touched">Username is required</small>
+      </div>
+      <div class="form-floating mb-3">
+        <input
+          type="email"
+          class="form-control username-input"
+          id="floatingInput"
+          name="email"
+          placeholder="email"
+          required
+          [(ngModel)]="Signupdata.email"
+          #email="ngModel"
+        />
+        <label for="floatingInput" class="label">Your Email Address</label>
+
+        <small *ngIf="email.errors && email.errors['required'] && email.touched"
+          >Email Address is required</small
+        >
+        <small *ngIf="email.errors && email.errors['email'] && email.touched"
+          >Email Address should be valid</small
+        >
+      </div>
+      <div class="form-floating mb-2 password-form">
+        <input
+          [type]="show_button ? 'text' : 'password'"
+          class="form-control password-input"
+          name="password"
+          id="floatingPassword"
+          placeholder="Password"
+          required
+          [(ngModel)]="Signupdata.password"
+          #password="ngModel"
+          maxlength="10"
+        />
+
+        <div class="show">
+          <button
+            type="button"
+            *ngIf="!hide_button"
+            class="custom-btn"
+            (click)="showPassword()"
+          >
+            <i class="fa-solid fa-eye"></i>
+          </button>
+          <button
+            type="button"
+            *ngIf="hide_button"
+            class="custom-btn"
+            (click)="showPassword()"
+          >
+            <i class="fa-solid fa-eye-slash"></i>
+          </button>
+        </div>
+        <label for="floatingPassword">Password</label>
+      </div>
+      <div class="mb-4">
+        <small
+          *ngIf="
+            password.errors && password.errors['required'] && password.touched
+          "
+          >Password is required</small
+        >
+      </div>
+
+      <div>
+        <button class="signupbtn mb-3" type="submit" [disabled]="!f.valid">
+          Sign up
+        </button>
+        <p class="text-center">or sign up with</p>
+        <div class="social-btn">
+          <button class="google" (click)="GoogleLogin()">
+            <i class="fa-brands fa-google"></i>
+            <span id="google">Google</span>
+          </button>
+          <button class="fb" (click)="FacebookLogin()">
+            <i class="fa-brands fa-facebook"></i><span id="fb">Facebook</span>
+          </button>
+        </div>
+      </div>
+      <p class="text-center mt-4">
+        By signing up, you will agree to the
+        <span class="span">Terms of Service</span> and
+        <span class="span">Privacy Policy</span>.
+      </p>
+      <p class="text-center">
+        Already have an account? <a class="signuptext" routerLink="">Log in</a>
+      </p>
+    </form>
+  </div>
+</div>

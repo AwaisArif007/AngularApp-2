@@ -1,0 +1,786 @@
+<div class="Main-container">
+  <div class="d-flex align-items-center mb-2">
+    <h3 id="h3">Dashboard</h3>
+    <div class="greater-icon"><i class="fa-solid fa-greater-than"></i></div>
+    <h3 id="h3">Add Document</h3>
+  </div>
+  <div class="Document-details">
+    <div *ngIf="addDocumentData">
+      <h3 class="mb-3">Document Details</h3>
+      <form
+        name="form"
+        (ngSubmit)="f.form.valid && onPreviewClick()"
+        #f="ngForm"
+        novalidate
+      >
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control username-input"
+            name="DocName"
+            required
+            [(ngModel)]="AddDocumentData.DocName"
+            #DocName="ngModel"
+          />
+          <label for="floatingInput" class="label grey-color fontWeight"
+            >Document Name
+            <i
+              class="fa fa-asterisk"
+              style="
+                font-size: 12px;
+                margin-bottom: 5px;
+                margin-left: 3px;
+                color: red;
+              "
+            ></i>
+          </label>
+          <small *ngIf="DocName.errors && f.submitted"
+            >Document Name is required</small
+          >
+        </div>
+        <div class="col-12">
+          <div class="d-flex justify-content-between">
+            <div class="form-floating col-5 d-flex" style="width: 45%">
+              <input
+                id="dt1"
+                type="date"
+                class="form-control username-input"
+                name="ExpiryDate"
+                [(ngModel)]="AddDocumentData.ExpiryDate"
+                required
+                #ExpiryDate="ngModel"
+              />
+              <label for="floatingInput" class="label grey-color"
+                >Expiration Date
+                <i
+                  class="fa fa-asterisk"
+                  style="
+                    font-size: 12px;
+                    margin-bottom: 5px;
+                    margin-left: 3px;
+                    color: red;
+                  "
+                ></i>
+              </label>
+            </div>
+            <div class="form-floating col-5 d-flex" style="width: 45%">
+              <select
+                class="form-control username-input select-input"
+                name="DocTypeId"
+                [(ngModel)]="selectedDocType"
+                required
+                #DocTypeId="ngModel"
+                (change)="ChangeDocument($event)"
+              >
+                <option value="1">Add New Document Type</option>
+                <option *ngFor="let obj of docTypeList" [ngValue]="obj">
+                  {{ obj.Title }}
+                </option>
+              </select>
+
+              <label for="floatingInput" class="label grey-color"
+                >Document Type
+                <i
+                  class="fa fa-asterisk"
+                  style="
+                    font-size: 12px;
+                    margin-bottom: 5px;
+                    margin-left: 3px;
+                    color: red;
+                  "
+                ></i
+              ></label>
+              <div class="input-action">
+                <i class="fa fa-angle-down"></i>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="col-md-6" style="width: 45%">
+              <small *ngIf="ExpiryDate.errors && f.submitted"
+                >Expiration Date is required</small
+              >
+            </div>
+            <div class="col-md-6" style="width: 45%">
+              <small *ngIf="DocTypeId.errors && f.submitted"
+                >Document Type is required</small
+              >
+            </div>
+          </div>
+          <div class="d-flex justify-content-between mt-3">
+            <div class="form-floating d-flex col-3" style="width: 22%">
+              <input
+                id="dt2"
+                type="date"
+                class="form-control username-input"
+                name="IssueDate"
+                [(ngModel)]="AddDocumentData.IssueDate"
+                #IssueDate="ngModel"
+              />
+              <label for="floatingInput" class="label grey-color"
+                >Issue Date</label
+              >
+            </div>
+
+            <div
+              class="form-floating d-flex col-5"
+              style="width: 18%; margin-left: -5%"
+            >
+              <input
+                style="margin-right: 15px; width: 40%"
+                type="number"
+                class="form-control username-input"
+                name="ValidFor"
+                min="0"
+                [(ngModel)]="AddDocumentData.ValidFor"
+                #ValidFor="ngModel"
+                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              />
+
+              <select
+                style="width: 60%"
+                class="form-control username-input"
+                name="ValidForPeriod"
+                [(ngModel)]="AddDocumentData.ValidForPeriod"
+                #ValidForPeriod="ngModel"
+              >
+                <option value="Years">Years</option>
+                <option value="Months">Months</option>
+                <option value="Weeks">Weeks</option>
+              </select>
+              <div class="input-action">
+                <div
+                  class="btn-group align-items-center action-padding opacity"
+                >
+                  <i class="fa fa-angle-down"></i>
+                </div>
+              </div>
+              <label for="floatingInput" class="label grey-color"
+                >Valid For
+              </label>
+            </div>
+            <div class="col-4 form-floating d-flex" style="width: 45%">
+              <select
+                class="form-control username-input"
+                name="FolderId"
+                [(ngModel)]="selectedFolderInfo"
+                required
+                #FolderId="ngModel"
+                (change)="ChangeFolder($event)"
+              >
+                <option value="1">Create New Folder</option>
+                <option *ngFor="let obj of userFolderList" [ngValue]="obj">
+                  {{ obj.Name }}
+                </option>
+              </select>
+              <label for="floatingInput" class="label grey-color"
+                >Move to Folder
+                <i
+                  class="fa fa-asterisk"
+                  style="
+                    font-size: 12px;
+                    margin-bottom: 5px;
+                    margin-left: 3px;
+                    color: red;
+                  "
+                ></i
+              ></label>
+              <div class="input-action">
+                <i class="fa fa-angle-down"></i>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between mb-3">
+            <div class="col-md-6" style="width: 45%"></div>
+            <div class="col-md-6" style="width: 45%">
+              <small *ngIf="FolderId.errors && f.submitted"
+                >Folder is required</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <h3 class="mt-5 fs-4">Additional Information (Optional)</h3>
+        <div class="col-12">
+          <div class="d-flex justify-content-between">
+            <div class="form-floating mb-3 col-5 d-flex" style="width: 45%">
+              <input
+                type="text"
+                class="form-control username-input"
+                name="DocOwnerName"
+                [(ngModel)]="AddDocumentData.DocOwnerName"
+                #DocOwnerName="ngModel"
+              />
+
+              <label for="floatingInput" class="label grey-color"
+                >Document Owner
+              </label>
+            </div>
+            <div class="form-floating mb-3 col-5 d-flex" style="width: 45%">
+              <input
+                type="email"
+                class="form-control username-input"
+                name="DocNumber"
+                [(ngModel)]="AddDocumentData.DocNumber"
+                #DocNumber="ngModel"
+              />
+              <label for="floatingInput" class="label grey-color"
+                >Document Number</label
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="d-flex justify-content-between">
+            <div class="form-floating mb-3 col-5 d-flex" style="width: 45%">
+              <select
+                class="form-control username-input"
+                name="StateId"
+                [(ngModel)]="selectedState"
+                #StateId="ngModel"
+                (change)="ChangeState()"
+              >
+                <option value="">Choose...</option>
+                <option *ngFor="let obj of cityList" [ngValue]="obj">
+                  {{ obj.FullName }}
+                </option>
+              </select>
+              <div class="input-action">
+                <i class="fa fa-angle-down"></i>
+              </div>
+              <label for="floatingInput" class="label grey-color">State </label>
+            </div>
+            <div class="form-floating mb-3 col-5 d-flex" style="width: 45%">
+              <select
+                class="form-control username-input"
+                name="CountryId"
+                [(ngModel)]="selectedCountry"
+                #CountryId="ngModel"
+                (change)="ChangeCountry()"
+              >
+                <option value="">Choose...</option>
+                <option *ngFor="let obj of countryList" [ngValue]="obj">
+                  {{ obj.FullName }}
+                </option>
+              </select>
+              <label for="floatingInput" class="label grey-color"
+                >Country
+              </label>
+              <div class="input-action">
+                <i class="fa fa-angle-down"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="form-check form-switch d-flex align-items-center justify-content-between mt-5"
+        >
+          <label
+            id="notification-label"
+            class="form-check-label"
+            for="flexSwitchCheckChecked"
+            >REMINDER</label
+          >
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            name="RemindMe"
+            [(ngModel)]="AddDocumentData.RemindMe"
+            #RemindMe="ngModel"
+            (change)="ChangeRemindMe(AddDocumentData.RemindMe)"
+            checked
+          />
+        </div>
+        <div class="d-flex justify-content-between" *ngIf="isRemindSessionShow">
+          <div class="col-6" style="width: 45%">
+            <h6 class="mt-4 grey-color">Remind me at</h6>
+
+            <ul *ngFor="let obj of RemindOnList" class="no-bullets">
+              <li>
+                <input
+                  type="checkbox"
+                  [(ngModel)]="obj.selected"
+                  name="{{ obj.RemindValue }}"
+                  value="{{ obj.RemindValue }}"
+                  (change)="CheckRemindOn(obj)"
+                />
+                <label class="ms-3 grey-color">{{ obj.name }}</label>
+              </li>
+            </ul>
+            <div
+              class="days-input d-flex align-items-center"
+              *ngIf="isRemindCustomShow"
+            >
+              <div class="d-flex align-items-baseline">
+                <button
+                  class="custom-btn fs-2"
+                  id="account-btn"
+                  type="button"
+                  (click)="decrementCriteria()"
+                >
+                  -
+                </button>
+                <input
+                  id="reminder-input"
+                  type="number"
+                  class="mx-2 text-center username-input reminder-input1"
+                  name="ReminderCustomCount"
+                  [(ngModel)]="AddDocumentData.ReminderCustomCount"
+                  #ReminderCustomCount="ngModel"
+                />
+                <button
+                  class="custom-btn fs-2"
+                  id="account-btn"
+                  type="button"
+                  (click)="incrementCriteria()"
+                >
+                  +
+                </button>
+              </div>
+              <select
+                class="form-control username-input mx-3 reminder-input2"
+                name="ReminderCustomPeriod"
+                [(ngModel)]="AddDocumentData.ReminderCustomPeriod"
+                #ReminderCustomPeriod="ngModel"
+              >
+                <option value="Weeks">Weeks Before</option>
+
+                <option value="Months">Months Before</option>
+              </select>
+              <div class="select-action">
+                <i class="fa fa-angle-down"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6" style="width: 45%">
+            <h6 class="mt-4 grey-color">Send to</h6>
+
+            <ul *ngFor="let obj of sendonList" class="no-bullets">
+              <li>
+                <input
+                  type="checkbox"
+                  [(ngModel)]="obj.selected"
+                  name="{{ obj.SendOn }}"
+                  value="{{ obj.SendOn }}"
+                  (change)="CheckSendOn(obj)"
+                />
+                <label class="ms-3">{{ obj.name }}</label>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <h6 class="mt-5">ATTACHMENT (OPTIONAL)</h6>
+        <img
+          *ngFor="let url of images; let i = index"
+          (click)="DeleteImageFromList(i)"
+          [src]="url"
+          height="150"
+          width="200px"
+          style="margin: 3px"
+        />
+        <br />
+
+        <div class="container-fluid mt-3 p-0">
+          <div class="upload-files">
+            <i class="fa-solid fa-arrow-up-from-bracket mt-5 mb-2"></i>
+            <h6 class="mb-5 grey-color">
+              Drag and drop files to here or
+              <span class="btn btn-file"
+                >browse
+                <input
+                  class="fileInput"
+                  type="file"
+                  (change)="selectFile($event)"
+                  multiple
+                />
+              </span>
+            </h6>
+          </div>
+        </div>
+        <div class="preview-cancel-btn">
+          <button
+            type="button"
+            class="cancel-btn"
+            routerLink="/client/dashboard"
+          >
+            Cancel
+          </button>
+          <button class="preview-btn" type="submit">Preview</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ************  Preview Data Start ******************* -->
+
+    <div *ngIf="previewData" class="preview-container">
+      <h4>PREVIEW</h4>
+      <h6 class="mb-4">
+        You can always edit your document, create tasks and share with others
+        after you save it.
+      </h6>
+
+      <div class="d-flex align-items-center w-100">
+        <div class="underline"></div>
+        <div class="preview-title">
+          <h5 class="text-center fontWeight">{{ AddDocumentData.DocName }}</h5>
+        </div>
+        <div class="underline"></div>
+      </div>
+
+      <div class="d-detail">
+        <h6 class="text-center fontWeight">Document Details</h6>
+      </div>
+      <div class="container-fluid">
+        <div class="row p-2 mt-4 detail">
+          <div class="d-flex justify-content-end">
+            <button
+              class="custom-btn edit-document"
+              (click)="onCancelPreview()"
+            >
+              Edit
+            </button>
+          </div>
+          <div class="col-4">
+            <div>
+              <h4 class="inputLabel">Expiration Date</h4>
+              <p class="inputValue" *ngIf="AddDocumentData.ExpiryDate">
+                {{ AddDocumentData.ExpiryDate | date }}
+              </p>
+              <p class="inputValue" *ngIf="AddDocumentData.ExpiryDate == null">
+                ---
+              </p>
+            </div>
+            <div>
+              <h4 class="inputLabel">Issue Date</h4>
+              <p class="inputValue" *ngIf="AddDocumentData.IssueDate">
+                {{ AddDocumentData.IssueDate | date }}
+              </p>
+              <p class="inputValue" *ngIf="AddDocumentData.IssueDate == null">
+                ---
+              </p>
+            </div>
+            <div>
+              <h4 class="inputLabel">Valid For</h4>
+              <p
+                class="inputValue"
+                *ngIf="
+                  AddDocumentData.ValidFor && AddDocumentData.ValidForPeriod
+                "
+              >
+                {{ AddDocumentData.ValidFor }}
+                {{ AddDocumentData.ValidForPeriod }}
+              </p>
+              <p
+                class="inputValue"
+                *ngIf="
+                  AddDocumentData.ValidFor == null &&
+                  AddDocumentData.ValidForPeriod == null
+                "
+              >
+                ---
+              </p>
+            </div>
+          </div>
+          <div class="col-3">
+            <div>
+              <h4 class="inputLabel">Document Type</h4>
+              <p class="inputValue" *ngIf="AddDocumentData.DocTypeName">
+                {{ AddDocumentData.DocTypeName }}
+              </p>
+              <p class="inputValue" *ngIf="AddDocumentData.DocTypeName == null">
+                ---
+              </p>
+            </div>
+            <div>
+              <h4 class="inputLabel">Folder</h4>
+              <p class="inputValue" *ngIf="AddDocumentData.FolderName">
+                {{ AddDocumentData.FolderName }}
+              </p>
+              <p class="inputValue" *ngIf="AddDocumentData.FolderName == null">
+                ---
+              </p>
+            </div>
+            <div>
+              <h4 class="inputLabel">Document Owner</h4>
+              <p class="inputValue" *ngIf="AddDocumentData.DocOwnerName">
+                {{ AddDocumentData.DocOwnerName }}
+              </p>
+              <p
+                class="inputValue"
+                *ngIf="AddDocumentData.DocOwnerName == null"
+              >
+                ---
+              </p>
+            </div>
+          </div>
+
+          <div class="col-3">
+            <div>
+              <h4 class="inputLabel">Document Number</h4>
+              <p class="inputValue" *ngIf="AddDocumentData.DocNumber">
+                {{ AddDocumentData.DocNumber }}
+              </p>
+              <p class="inputValue" *ngIf="AddDocumentData.DocNumber == null">
+                ---
+              </p>
+            </div>
+            <div>
+              <h4 class="inputLabel">State</h4>
+              <p class="inputValue" *ngIf="AddDocumentData.StateName">
+                {{ AddDocumentData.StateName }}
+              </p>
+              <p class="inputValue" *ngIf="AddDocumentData.StateName == null">
+                ---
+              </p>
+            </div>
+            <div>
+              <h4 class="inputLabel">Country</h4>
+              <p class="inputValue" *ngIf="AddDocumentData.CountryName">
+                {{ AddDocumentData.CountryName }}
+              </p>
+              <p class="inputValue" *ngIf="AddDocumentData.CountryName == null">
+                ---
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-5 mt-2">
+        <!-- <div> -->
+
+        <div class="col">
+          <div class="d-detail2">
+            <h6 class="text-center fontWeight">Reminder</h6>
+          </div>
+          <div class="detail ps-5 p-2" *ngIf="CheckedRemindOnList.length > 0">
+            <div class="d-flex justify-content-end">
+              <button
+                class="custom-btn edit-document"
+                (click)="onCancelPreview()"
+              >
+                Edit
+              </button>
+            </div>
+            <h4 class="inputLabel">Remind me at</h4>
+            <div *ngFor="let obj of CheckedRemindOnList">
+              <p class="inputValue" *ngIf="obj.RemindValue == 1">
+                6 Months Before Expiration
+              </p>
+              <p class="inputValue" *ngIf="obj.RemindValue == 2">
+                3 Months Before Expiration
+              </p>
+              <p class="inputValue" *ngIf="obj.RemindValue == 3">
+                1 Months Before Expiration
+              </p>
+              <p class="inputValue" *ngIf="obj.RemindValue == 4">
+                2 Weeks Before Expiration
+              </p>
+              <p class="inputValue" *ngIf="obj.RemindValue == 5">
+                {{obj.ReminderCustomCount}} {{obj.ReminderCustomPeriod}} Before Expiration
+              </p>
+            </div>
+
+            <h4 class="inputLabel">Send to</h4>
+            <div *ngFor="let obj of CheckedSendOnList">
+              <p class="inputValue" *ngIf="obj.SendOn == 1">Email</p>
+              <p class="inputValue" *ngIf="obj.SendOn == 2">Phone</p>
+            </div>
+          </div>
+          <div class="detail ps-5 p-2" *ngIf="CheckedRemindOnList.length == 0">
+            <p class="inputValue text-center">No Reminder</p>
+          </div>
+        </div>
+        <!-- </div> -->
+        <div class="col">
+          <div class="d-detail2">
+            <h6 class="text-center fontWeight">Attachment</h6>
+          </div>
+          <div class="detail ps-5 p-2" *ngif="selectedFiles">
+            <div class="d-flex justify-content-end">
+              <button
+                class="custom-btn edit-document"
+                (click)="onCancelPreview()"
+              >
+                Edit
+              </button>
+            </div>
+            <p class="inputValue">VA Driver License Renew.pdf</p>
+            <p class="inputValue">Current Driver License Image.jpg</p>
+          </div>
+          <div class="detail ps-5 p-2" *ngIf="!selectedFiles">
+            <p class="inputValue text-center">No Attachment</p>
+          </div>
+        </div>
+      </div>
+      <div class="preview-cancel-btn">
+        <button type="button" class="cancel-btn" (click)="onCancelPreview()">
+          Cancel
+        </button>
+        <button type="submit" class="preview-btn" (click)="addDocument()">
+          Save
+        </button>
+      </div>
+    </div>
+
+    <!-- ************  Preview Data End ******************* -->
+  </div>
+</div>
+<ng-template
+  #NewFolder
+  let-modal
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+>
+    <div class="modal-content">
+      <form
+        name="form"
+        (ngSubmit)="f.form.valid && CreateFolder(f)"
+        #f="ngForm"
+        novalidate
+      >
+        <div class="modal-header modal-border">
+          <h5 class="modal-title">New Folder</h5>
+          <div class="ms-4">
+            <input
+              class="ms-1 form-check-input input1"
+              type="radio"
+              name="color"
+              [(ngModel)]="form.color"
+              #color="ngModel"
+              value="#BEEAFF"
+            />
+            <input
+              class="ms-1 form-check-input input2"
+              type="radio"
+              name="color"
+              [(ngModel)]="form.color"
+              #color="ngModel"
+              value="#F44336"
+            />
+            <input
+              class="ms-1 form-check-input input3"
+              type="radio"
+              name="color"
+              [(ngModel)]="form.color"
+              #color="ngModel"
+              value="#FFBA33"
+            />
+            <input
+              class="ms-1 form-check-input input4"
+              type="radio"
+              name="color"
+              [(ngModel)]="form.color"
+              #color="ngModel"
+              value="#F44333"
+            />
+            <input
+              class="ms-1 form-check-input input5"
+              type="radio"
+              name="color"
+              [(ngModel)]="form.color"
+              #color="ngModel"
+              value="#36F4A2"
+            />
+          </div>
+          <button
+            type="button"
+            class="btn-close"
+            (click)="CloseModel()"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Folder Name (i.e. Home)"
+            name="Name"
+            required
+            [(ngModel)]="form.Name"
+            #Name="ngModel"
+          />
+          <div
+            class="alert alert-danger"
+            role="alert"
+            *ngIf="Name.errors && f.submitted"
+          >
+            Name is required!
+          </div>
+        </div>
+        <div class="d-flex justify-content-between mt-2 mb-2 p-2">
+          <div>
+            <button
+              type="button"
+              class="btn fontWeight custom-btn"
+              (click)="CloseModel()"
+            >
+              Cancel
+            </button>
+          </div>
+          <div class="">
+            <button type="submit" class="btn fontWeight custom-btn">
+              Create
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+  <ng-template #DocType let-modal>
+    <div class="modal-content">
+      <form
+        name="form"
+        (ngSubmit)="DocTypeForm.form.valid && AddNewDocType(DocTypeForm)"
+        #DocTypeForm="ngForm"
+        novalidate
+      >
+        <div class="modal-header">
+          <h5 class="modal-title">Add New Document type</h5>
+
+          <button
+            type="button"
+            class="btn-close"
+            (click)="CloseModel()"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Title is here"
+            name="Title"
+            required
+            [(ngModel)]="docTypeform.Title"
+            #Title="ngModel"
+          />
+          <div
+            class="alert alert-danger"
+            role="alert"
+            *ngIf="Title.errors && DocTypeForm.submitted"
+          >
+            Document Type is required!
+          </div>
+        </div>
+        <div class="d-flex justify-content-between mt-2 mb-2 p-2">
+          <div>
+            <button
+              type="button"
+              class="btn fontWeight custom-btn"
+              (click)="CloseModel()"
+            >
+              Cancel
+            </button>
+          </div>
+          <div class="">
+            <button type="submit" class="btn fontWeight custom-btn">Add</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-template>

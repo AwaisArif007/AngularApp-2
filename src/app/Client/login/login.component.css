@@ -1,0 +1,8 @@
+.forgotbutton {
+  position: absolute;
+  border: none;
+  background-color: transparent;
+  font-size: 14px;
+  font-weight: bold;
+  width: 140px;
+}

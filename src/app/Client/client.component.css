@@ -1,0 +1,151 @@
+header {
+  padding: 10px 25px;
+  background-color: #ffffff;
+  box-shadow: 1.5px 3.5px 2.5px rgb(224, 220, 220);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  color: #003e5b;
+}
+.logo {
+  width: 140px;
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f8f8f8;
+  min-height: 100vh;
+}
+.logintext,
+.signuptext,
+.checkboxtext,
+.forgotbutton,
+.text,
+.span {
+  color: #003e5b;
+}
+.span {
+  font-weight: bold;
+  text-decoration: underline;
+}
+.logintext {
+  font-weight: bold;
+  font-size: 22px;
+}
+.checkboxtext {
+  color: #003e5b;
+  font-weight: 600;
+  font-size: 14px;
+}
+.form-check-input:checked {
+  background-color: #003e5b;
+}
+.signuptext {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.form-container {
+  margin-top: 80px;
+}
+input {
+  background-color: inherit;
+}
+
+.username-input {
+  border: none;
+  border-bottom: 1px solid rgb(213 196 196);
+  border-width: 2px;
+  border-radius: 0;
+  padding-left: 0;
+  color: #003e5b;
+  font-size: 20px;
+}
+.password-form {
+  width: 100%;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.password-input {
+  border: none;
+  border-bottom: 1px solid rgb(0 62 91);
+  border-width: 3px;
+  border-radius: 0;
+  padding-left: 0;
+  color: #003e5b;
+  font-size: 20px;
+}
+.password-input:focus,
+.username-input:focus {
+  background-color: inherit;
+  box-shadow: none;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+input:-internal-autofill-selected {
+  box-shadow: inset 0 0 0 100px rgb(248, 248, 248) !important;
+}
+
+label {
+  padding-left: 0;
+  margin-left: -3px;
+}
+
+.loginbtn,
+.signupbtn {
+  padding: 6px 0;
+
+  color: rgba(255, 255, 255);
+  font-size: 21.5px;
+  width: 100%;
+  border-radius: 27px;
+  background-color: rgba(0, 62, 91);
+  border: none;
+}
+
+/* ***** Validation **** */
+input.ng-invalid.ng-touched {
+  border-bottom: 1px solid red;
+}
+
+small {
+  color: red;
+}
+
+button[type="submit"]:disabled {
+  background: rgb(64, 64, 64);
+  opacity: 0.6;
+}
+
+.form-floating > .form-control:focus,
+.form-floating > .form-control:not(:placeholder-shown) {
+  padding-bottom: 0;
+}
+
+::placeholder {
+  visibility: hidden;
+}
+
+.custom-btn {
+  background: transparent;
+  border: none;
+}
+
+
+/* @media screen and (min-width: 290px) and (max-width: 400px) {
+  .form-container {
+    width: 90%;
+  }
+} */

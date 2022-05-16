@@ -1,0 +1,68 @@
+.logo {
+  width: 120px;
+  height: 40px;
+}
+header {
+  padding: 10px 25px;
+  background-color: #ffffff;
+  box-shadow: 1.5px 3.5px 2.5px rgb(224, 220, 220);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  color: #003e5b;
+}
+.navbar-collapse {
+  margin-left: 30px;
+}
+.navbar-nav .nav-link {
+  margin-left: 16px;
+}
+.nav-item > a {
+  font-size: 17px;
+  color: #777777;
+  opacity: 0.8;
+}
+.nav-item > a:hover {
+  color: #003e5b;
+  font-weight: bold;
+}
+.profile-icon {
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-group-margin {
+  margin-left: 25px;
+}
+.btn-check:focus + .btn,
+.btn:focus {
+  box-shadow: none;
+}
+.profile-info {
+  margin-left: 10px;
+  margin-top: 20px;
+}
+.circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: rgb(54, 244, 162, 0.2);
+}
+.x-mark {
+  /* float: right; */
+  position: absolute;
+  right: 20px;
+}
+
+.dropdown-item {
+  color: #003e5b;
+}
+
+/* li > a:focus {
+  border-bottom: 2px solid #003e5b;
+} */

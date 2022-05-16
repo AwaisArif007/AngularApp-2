@@ -1,0 +1,135 @@
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+      <img src="assets/logo/full logo.png" class="logo" />
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              aria-current="page"
+              routerLink="/client/dashboard"
+              >Dashboard</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/client/calender">Calender</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/client/folders">Folders</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/client/savedDocuments/0">Saved Documents</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/client/files">Files</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/client/sharing">Sharing</a>
+          </li>
+        </ul>
+
+        <form class="d-flex align-items-center">
+          <div class="btn-group">
+            <button type="button"  class="btn profile-icon" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="assets/icons/1.5x/notify.png" />
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" style="width: 400px;">
+              <li>
+                <div class="dropdown-item d-flex align-items-center my-2">
+                  <h5 class="fontSize m-0">Notifications</h5>
+                  <div class="x-mark">
+                    <button class="custom-btn">
+                      <i class="fa-solid fa-xmark"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="underline"></div>
+              </li>
+              <li></li>
+              <li *ngFor="let i of notificationList">
+                <div class="d-flex dropdown-item my-3">
+                  <div class="circle">BS</div>
+                    <div class="d-flex flex-column flex-wrap">
+                      <p class="fontSize"> {{i.Message}}</p>
+                      <p class="grey-color fontSize">{{i.CreatedOn | date: "mediumDate"}}</p>
+                    </div>
+                </div>
+              </li>
+              <div class="underline"></div>
+              <div class="d-flex align-items-center justify-content-center my-1">
+                <button class="custom-btn grey-color">
+                  View all notifications
+                </button>
+              </div>
+            </ul>
+          </div>
+          <!-- <div>
+            <img src="assets/icons/1.5x/notify.png" />
+          </div> -->
+          <div class="btn-group btn-group-margin circle">
+            <button
+              type="button"
+              class="btn profile-icon"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <h4>{{usernameFirstChar}}</h4>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <div class="dropdown-item d-flex align-items-center">
+                  <div class="circle"><h4>{{usernameFirstChar}}</h4></div>
+                  <span class="profile-info">
+                    <h4 class="fs-5 m-0">{{ username }}</h4>
+                    <p>{{ email }}</p>
+                  </span>
+                </div>
+              </li>
+              <li>
+                <button
+                  class="dropdown-item"
+                  type="button"
+                  routerLink="/client/settings"
+                >
+                  Settings
+                </button>
+              </li>
+              <li>
+                <button class="dropdown-item" type="button">
+                  Download Xpiree Mobile App
+                </button>
+              </li>
+              <li>
+                <button
+                  class="dropdown-item"
+                  type="button"
+                  routerLink="/client/settings"
+                >
+                  Feedback
+                </button>
+              </li>
+              <li>
+                <button class="dropdown-item" type="button" routerLink="">
+                  Sign Out
+                </button>
+              </li>
+            </ul>
+          </div>
+        </form>
+      </div>
+    </div>
+  </nav>
+</header>
+<router-outlet></router-outlet>

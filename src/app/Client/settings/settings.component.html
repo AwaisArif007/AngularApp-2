@@ -1,0 +1,639 @@
+<div class="settings">
+  <div class="Main-container">
+    <h3>Settings</h3>
+    <p class="mt-3">
+      Update your profile, choose notification preference, manage sharing list
+      and provide feedback
+    </p>
+    <nav class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a
+        class="nav-link active"
+        id="nav-home-tab"
+        data-bs-toggle="tab"
+        href="#nav-home"
+        role="tab"
+        aria-controls="nav-home"
+        aria-selected="true"
+        >Account</a
+      >
+      <a
+        class="nav-link"
+        id="nav-notifications-tab"
+        data-bs-toggle="tab"
+        href="#nav-notifications"
+        role="tab"
+        aria-controls="nav-notifications"
+        aria-selected="false"
+        >Notifications</a
+      >
+      <a
+        class="nav-link"
+        id="nav-sharing-tab"
+        data-bs-toggle="tab"
+        href="#nav-sharing"
+        role="tab"
+        aria-controls="nav-sharing"
+        aria-selected="false"
+        >Sharing</a
+      >
+      <a
+        class="nav-link"
+        id="nav-feedback-tab"
+        data-bs-toggle="tab"
+        href="#nav-feedback"
+        role="tab"
+        aria-controls="nav-feedback"
+        aria-selected="false"
+        >Feedback</a
+      >
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+      <div
+        class="tab-pane fade show active"
+        id="nav-home"
+        role="tabpanel"
+        aria-labelledby="nav-home-tab"
+      >
+        <form
+          name="form"
+          (ngSubmit)="user.form.valid && AddUserInfo(user)"
+          #user="ngForm"
+          novalidate
+        >
+          <div *ngIf="showSaveView" class="row g-5 mt-3 account">
+            <div class="col col-12 col-md-6 col-sm-8 col-lg-2 px-3">
+              <h5 class="grey-color">Profile Picture</h5>
+              <div class="upload-pic">
+                <div class="btn btn-file">
+                  <div *ngIf="!previewImage">
+                    <i class="fa-solid fa-camera"></i>
+                  </div>
+                  <img
+                    *ngIf="previewImage"
+                    [src]="previewImage"
+                    style="border-radius: 50%; width: 50px; height: 50px"
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    (change)="selectFile($event)"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col col-12 col-md-6 col-sm-8 col-lg-3 px-3">
+              <h5 class="grey-color">Name</h5>
+              <input
+                id="account-input"
+                type="text"
+                class="input-style"
+                name="Name"
+                required
+                [(ngModel)]="UserAccount.Name"
+                #Name="ngModel"
+              />
+              <div
+                class="alert alert-danger"
+                role="alert"
+                *ngIf="Name.errors && user.submitted"
+              >
+                Name is required!
+              </div>
+
+              <div class="mt-4">
+                <h5 class="grey-color">Email Address</h5>
+                <h5 class="email-text">{{ UserAccount.Email }}</h5>
+              </div>
+            </div>
+
+            <div class="col col-12 col-md-6 col-sm-8 col-lg-3 px-3">
+              <h5 class="grey-color">Mobile Phone Number</h5>
+              <input
+                id="account-input"
+                type="number"
+                class="input-style"
+                name="PhoneNumber"
+                required
+                [(ngModel)]="UserAccount.PhoneNumber"
+                #PhoneNumber="ngModel"
+              />
+              <div
+                class="alert alert-danger"
+                role="alert"
+                *ngIf="PhoneNumber.errors && user.submitted"
+              >
+                Phone Number is required!
+              </div>
+              <div class="mt-4">
+                <h5 class="grey-color">
+                  We'll text you to confirm your number.
+                </h5>
+                <h5 class="grey-color">
+                  Standard message and data rates apply
+                </h5>
+              </div>
+            </div>
+            <div class="col col-12 col-md-6 col-sm-8 col-lg-4 px-3">
+              <h5 class="grey-color">Document Expiring Criteria</h5>
+              <div class="days-input d-flex align-items-center">
+                <button
+                  id="account-btn"
+                  type="button"
+                  (click)="decrementCriteria()"
+                >
+                  −
+                </button>
+                <input
+                  id="account-input2"
+                  type="number"
+                  class="input-style mx-2 text-center"
+                  name="DocExpiringCriteria"
+                  required
+                  [(ngModel)]="UserAccount.DocExpiringCriteria"
+                  #DocExpiringCriteria="ngModel"
+                />
+                <div
+                  class="alert alert-danger"
+                  role="alert"
+                  *ngIf="DocExpiringCriteria.errors && user.submitted"
+                >
+                  Expiring Criteria is required!
+                </div>
+                <button
+                  id="account-btn"
+                  type="button"
+                  (click)="incrementCriteria()"
+                >
+                  +
+                </button>
+                <h5 class="mt-2 mx-2">Days Before</h5>
+              </div>
+              <h5 class="mt-3 lh-base grey-color">
+                Specify how much time before a document becomes eligible for
+                "Expiring" status. The default is 60 days before the expiration
+                date.
+              </h5>
+              <button id="reset-btn" (click)="setDefaultCriteria()">
+                Reset to Default
+              </button>
+            </div>
+            <div class="save-cancel-btn">
+              <button type="button" class="cancel-btn">Cancel</button>
+              <button type="submit" class="save-btn">Save</button>
+            </div>
+          </div>
+        </form>
+        <!-- ********* Validate Phone Number Start ******** -->
+
+        <!-- <div
+          *ngIf="showSaveView"
+          class="row d-flex justify-content-between mt-5 account"
+        >
+          <div class="col-2">
+            <h5>Profile Picture</h5>
+            <div class="upload-pic">
+            </div>
+          </div>
+          <div class="col-3">
+            <h5>Name</h5>
+            <input id="account-input" type="text" class="input-style" />
+            <div class="mt-4">
+              <h5>Email Address</h5>
+              <h5 class="email-text">trinityliu@example.com</h5>
+            </div>
+          </div>
+
+          <div class="col-3">
+            <h5>Mobile Phone Number</h5>
+            <input id="account-input" type="number" class="input-style" />
+            <div class="mt-4">
+              <h5>We'll text you to confirm your number.</h5>
+              <h5>Standard message and data rates apply</h5>
+            </div>
+            <h5 class="mt-5">Confirm your number</h5>
+            <input id="account-input" type="number" class="code-input" />
+
+            <input
+              id="account-input"
+              type="number"
+              class="code-input code-input-margin"
+            />
+
+            <input
+              id="account-input"
+              type="number"
+              class="code-input code-input-margin"
+            />
+
+            <input
+              id="account-input"
+              type="number"
+              class="code-input code-input-margin"
+            />
+            <h5 class="mt-3">Enter the 4-digit code sent to +1 703-218-8177</h5>
+            <button id="reset-btn" class="mt-4">Resend Code</button>
+          </div>
+          <div class="col-3">
+            <h5>Document Expiring Criteria</h5>
+            <div class="days-input d-flex align-items-center">
+              <button id="account-btn" type="button">−</button>
+              <input
+                id="account-input"
+                type="text"
+                class="input-style document-input mx-2"
+              />
+              <button id="account-btn" type="button">+</button>
+              <h5 class="mt-2 mx-2">Days Before</h5>
+            </div>
+            <h5 class="mt-3 lh-base">
+              Specify how much time before a document becomes eligible for
+              "Expiring" status. The default is 60 days before the expiration
+              date.
+            </h5>
+            <button id="reset-btn">Reset to Default</button>
+          </div>
+          <div class="save-cancel-btn">
+            <button type="button" class="cancel-btn">Cancel</button>
+            <button type="button" class="save-btn" (click)="onSaveClick()">
+              Save
+            </button>
+          </div>
+        </div> -->
+
+        <!-- ********* Validate Phone Number End ******** -->
+
+        <!-- ************** Account Save Button View Start ************ -->
+
+        <div *ngIf="showEditView" class="row d-flex mt-5 account">
+          <div class="col-2">
+            <h5>Profile Picture</h5>
+            <div class="upload-pic">
+              <img
+                [src]="UserAccount.ProfilePic"
+                style="border-radius: 50%; width: 100px; height: 100px"
+              />
+            </div>
+          </div>
+          <div class="col-2">
+            <h5>Name</h5>
+            <h5 class="email-text">{{ UserAccount.Name }}</h5>
+            <div class="mt-4">
+              <h5>Email Address</h5>
+              <h5 class="email-text">{{ UserAccount.Email }}</h5>
+            </div>
+          </div>
+
+          <div class="col-2">
+            <h5>Mobile Phone Number</h5>
+            <h5 class="email-text">{{ UserAccount.PhoneNumber }}</h5>
+          </div>
+          <div class="col-2">
+            <h5>Document Expiring Criteria</h5>
+            <h5 class="email-text">
+              {{ UserAccount.DocExpiringCriteria }} Days
+            </h5>
+          </div>
+          <div class="save-cancel-btn">
+            <button
+              type="button"
+              class="edit-btn"
+              (click)="onAccountEditClick()"
+            >
+              Edit
+            </button>
+          </div>
+        </div>
+
+        <!-- ************** Account Save Button View End ************ -->
+      </div>
+
+      <!-- ************ Notification View Start ************** -->
+
+      <div
+        class="tab-pane fade"
+        id="nav-notifications"
+        role="tabpanel"
+        aria-labelledby="nav-notifications-tab"
+      >
+        <div class="row g-5 notification">
+          <div class="col col-12 col-md-6 col-sm-8 col-lg-4 mt-5">
+            <div
+              class="form-check form-switch d-flex justify-content-between align-items-start"
+            >
+              <div class="d-flex flex-column">
+                <label
+                  id="notification-label"
+                  class="form-check-label"
+                  for="flexSwitchCheckChecked"
+                  >Dcocument Expirations</label
+                >
+                <h5 class="grey-color">Expiring and expired documents</h5>
+              </div>
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="flexSwitchCheckChecked"
+                checked
+                (change)="SetNotification()"
+                name="DocExpiry"
+                [(ngModel)]="NotificationSetting.DocExpiry"
+                #DocExpiry="ngModel"
+              />
+            </div>
+          </div>
+          <div class="col col-12 col-md-6 col-sm-8 col-lg-4 mt-5">
+            <div
+              class="form-check form-switch d-flex justify-content-between align-items-center"
+            >
+              <label
+                id="notification-label"
+                class="form-check-label"
+                for="flexSwitchCheckChecked"
+                >Shared Dcocuments</label
+              >
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="flexSwitchCheckChecked"
+                checked
+                (change)="SetNotification()"
+                name="DocShared"
+                [(ngModel)]="NotificationSetting.DocShared"
+                #DocShared="ngModel"
+              />
+            </div>
+            <h5 class="grey-color">Shared dcocuments updates</h5>
+          </div>
+          <div class="col col-12 col-md-6 col-sm-8 col-lg-4 mt-5">
+            <div
+              class="form-check form-switch d-flex justify-content-between align-items-center"
+            >
+              <label
+                id="notification-label"
+                class="form-check-label"
+                for="flexSwitchCheckChecked"
+                >In-App Reminders</label
+              >
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="flexSwitchCheckChecked"
+                checked
+                (change)="SetNotification()"
+                name="InAppReminder"
+                [(ngModel)]="NotificationSetting.InAppReminder"
+                #InAppReminder="ngModel"
+              />
+            </div>
+            <h5 class="grey-color">Your document expiration reminders</h5>
+          </div>
+        </div>
+      </div>
+      <!-- ************ Notification View End ************** -->
+
+      <!-- ************ Sharing View Start ************** -->
+
+      <div
+        class="tab-pane fade"
+        id="nav-sharing"
+        role="tabpanel"
+        aria-labelledby="nav-sharing-tab"
+      >
+        <div class="row sharing">
+          <div class="col-12 col-sm-12 col-md-7 col-lg-7">
+            <div class="d-flex justify-content-between mt-4">
+              <h4>Sharing Members({{ sharerCount }})</h4>
+              <h4>Add Sharer</h4>
+            </div>
+            <div class="search mt-1">A</div>
+            <div class="sharer-title" *ngFor="let obj of sharerList">
+              <div class="profile d-flex align-items-center">
+                <img src="assets/Images/add.png" />
+                <span class="profile-info">
+                  <h4>{{ obj.Name }}</h4>
+                  <h5 class="mt-0">{{ obj.Email }}</h5>
+                </span>
+              </div>
+              <div class="status">
+                <h5>{{ obj.AccessTypeTitle }}</h5>
+              </div>
+            </div>
+          </div>
+
+          <!-- ************ New Sharing View Start ************** -->
+          <div
+            *ngIf="sharerSaveView"
+            class="col-12 col-sm-12 col-md-5 col-lg-5"
+          >
+            <form
+              name="form"
+              (ngSubmit)="s.form.valid && AddSharer(s)"
+              #s="ngForm"
+              novalidate
+            >
+              <div class="new-sharing">
+                <h4>New Sharing</h4>
+                <div class="form-floating mb-4">
+                  <input
+                    type="email"
+                    class="form-control username-input"
+                    placeholder="Email"
+                    name="email"
+                    required
+                    [(ngModel)]="sharer.email"
+                    #email="ngModel"
+                    (change)="FindSharerByEmail()"
+                  />
+
+                  <label for="floatingEmail">Email Address</label>
+                  <div
+                    class="alert alert-danger"
+                    role="alert"
+                    *ngIf="email.errors && s.submitted"
+                  >
+                    Email is required!
+                  </div>
+                </div>
+                <div class="form-floating mb-4">
+                  <input
+                    type="text"
+                    class="form-control username-input"
+                    placeholder="Name"
+                    name="name"
+                    required
+                    [(ngModel)]="sharer.name"
+                    #name="ngModel"
+                  />
+                  <label for="floatingInput" class="label">Name</label>
+                  <div
+                    class="alert alert-danger"
+                    role="alert"
+                    *ngIf="name.errors && s.submitted"
+                  >
+                    Name is required!
+                  </div>
+                </div>
+                <div class="form-floating">
+                  <select
+                    class="form-control username-input"
+                    name="AccessTypeId"
+                    [(ngModel)]="sharer.AccessTypeId"
+                    required
+                    #AccessTypeId="ngModel"
+                  >
+                    <option value="">Choose...</option>
+                    <option
+                      *ngFor="let obj of AccessTypeList"
+                      [ngValue]="obj.Id"
+                    >
+                      {{ obj.Title }}
+                    </option>
+                  </select>
+                  <label for="floatingInput" class="label">Access</label>
+                  <div
+                    class="alert alert-danger"
+                    role="alert"
+                    *ngIf="AccessTypeId.errors && s.submitted"
+                  >
+                    Access is required!
+                  </div>
+                </div>
+              </div>
+              <div
+                id="save-cancel-btn"
+                class="mt-5 d-flex align-items-center justify-content-evenly"
+              >
+                <button type="button" id="cancel-btn" (click)="ClearForm(s)">
+                  Cancel
+                </button>
+                <button type="submit" id="save-btn">Save</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- ************* Sharer Edit View start ********* -->
+          <div *ngIf="sharerEditView" class="col-5">
+            <div class="new-sharing">
+              <div
+                class="profile d-flex align-items-center justify-content-between"
+              >
+                <img src="assets/Images/add.png" />
+                <button class="delete-btn">Delete</button>
+              </div>
+
+              <form>
+                <div class="d-flex justify-content-between">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      class="form-control username-input"
+                      id="floatingInput"
+                      placeholder="name"
+                    />
+                    <label for="floatingInput" class="label">Name</label>
+                  </div>
+                  <div class="form-floating mb-3 mx-4">
+                    <input
+                      type="email"
+                      class="form-control username-input"
+                      id="floatingInput"
+                      placeholder="name@example.com"
+                    />
+                    <label for="floatingInput" class="label">Access</label>
+                  </div>
+                </div>
+                <div class="form-floating mb-4">
+                  <input
+                    type="password"
+                    class="form-control username-input"
+                    id="floatingPassword"
+                    placeholder="Password"
+                  />
+
+                  <label for="floatingPassword">Email Address</label>
+                </div>
+              </form>
+            </div>
+            <button type="button" class="sharer-edit-btn">Edit</button>
+          </div>
+          <!-- ************* Sharer Edit View End ********* -->
+
+          <!-- ************ New Sharing View End ************** -->
+        </div>
+      </div>
+
+      <!-- ************ Sharing View End ************** -->
+
+      <!-- ************ Feedback View Start ************** -->
+
+      <div
+        class="tab-pane fade"
+        id="nav-feedback"
+        role="tabpanel"
+        aria-labelledby="nav-feedback-tab"
+      >
+        <form
+          name="form"
+          (ngSubmit)="fb.form.valid && AddFeedBack(fb)"
+          #fb="ngForm"
+          novalidate
+        >
+          <div class="col-md-5">
+            <h5 class="mt-5">Subject</h5>
+            <input
+              id="account-input"
+              type="text"
+              class="input-style w-100"
+              name="subject"
+              required
+              [(ngModel)]="FeedBack.subject"
+              #subject="ngModel"
+            />
+            <div
+              class="alert alert-danger"
+              role="alert"
+              *ngIf="subject.errors && fb.submitted"
+            >
+              Subject is required!
+            </div>
+            <div class="mt-5 mb-3 d-flex justify-content-between">
+              <h5>Details</h5>
+              <h5>0/1000</h5>
+            </div>
+            <div class="form">
+              <textarea
+                class="form-control"
+                placeholder=""
+                style="height: 130px"
+                spellcheck="false"
+                data-ms-editor="true"
+                name="detail"
+                required
+                [(ngModel)]="FeedBack.detail"
+                #detail="ngModel"
+              ></textarea>
+              <div
+                class="alert alert-danger"
+                role="alert"
+                *ngIf="detail.errors && fb.submitted"
+              >
+                Details is required!
+              </div>
+            </div>
+          </div>
+          <div class="save-cancel-btn">
+            <button type="button" class="cancel-btn" (click)="ClearForm(fb)">
+              Clear
+            </button>
+            <button type="submit" class="save-btn">Save</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ************ Feedback View End ************** -->
+    </div>
+  </div>
+</div>

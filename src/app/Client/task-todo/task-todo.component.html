@@ -1,0 +1,25 @@
+<div class="Main-container">
+    <h3>Task to DO</h3>
+    <div class="files">
+      <table class="table">
+        <thead>
+          <tr class="table-tr">
+            <th class="padding" scope="col">Task</th>
+            <th class="padding" scope="col">Assign to</th>
+            <th class="padding" scope="col">Document</th>
+            <th class="padding" scope="col">Due Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let i of taskList" class="border-color">
+            <td class="td-padding opacity">{{ i.TaskName }}</td>
+            <td class="td-padding opacity">{{ i.AssignToName }}</td>
+            <td class="td-padding document">{{ i.DocName }}</td>
+            <td class="td-padding opacity"> {{ i.DueDate | date: "mediumDate" }}</td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

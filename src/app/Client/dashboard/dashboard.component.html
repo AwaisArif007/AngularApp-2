@@ -1,0 +1,1596 @@
+<div class="Main-container">
+  <!-- ***** No Documents View Start ****** -->
+  <div *ngIf="showModal == true">
+    <h3 class="fontWeight">Dashboard</h3>
+    <div class="d-flex flex-column align-items-center justify-content-center">
+      <i class="fa-solid fa-folder-open fa-4x mb-4"></i>
+      <h6 class="grey-color mb-4">No Documents Added</h6>
+      <button class="add-new-folder" routerLink="/client/addDocument">
+        <span>+ Add Document</span>
+      </button>
+    </div>
+  </div>
+  <div *ngIf="showModal == false">
+    <!-- ***** No Documents View End ****** -->
+
+    <div *ngIf="isMainopen">
+      <div class="drop-left">
+        <button *ngIf="isCollapsed" (click)="toggleCollapsed()">
+          <i class="fa-solid fa-circle-chevron-left"></i>
+        </button>
+
+        <!-- ************ Calender-View Start ************** -->
+
+        <div *ngIf="!isCollapsed" class="calender-view">
+          <div class="conatiner-fluid col-3 calender-dashboard">
+            <button
+              *ngIf="!isCollapsed"
+              (click)="toggleCollapsed()"
+              style="position: absolute; left: -10px; top: 30px"
+            >
+              <i class="fa-solid fa-circle-chevron-right"></i>
+            </button>
+            <div class="calender">
+              <full-calendar
+                #calendar
+                [options]="calendarOptions"
+              ></full-calendar>
+            </div>
+            <div class="p-2">
+              <div class="row d-flex flex-column">
+                <div class="mt-4" *ngFor="let i of docList">
+                  <div class="col-md-1 col-lg-1">
+                    <h6>{{ i.ExpiryDate | date: "MMM dd" }}</h6>
+                  </div>
+                  <div class="col-md-11 col-lg-11 ms-2">
+                    <div class="expired-container b3" *ngIf="i.Status == 1">
+                      <div class="title">
+                        <h2 class="fontWeight">{{ i.DocName }}</h2>
+                        <span class="icon">
+                          <img src="assets/icons/1x/list.png" />
+                          <i
+                            class="fa-solid fa-share"
+                            style="margin-left: 7px; margin-right: 7px"
+                          ></i>
+                          <i class="fa-solid fa-bookmark"></i>
+                        </span>
+                      </div>
+                      <h3 class="date cl3">
+                        {{ i.ExpiryDate | date: "mediumDate" }}
+                      </h3>
+                      <h5 class="text-start">Pending Renewal</h5>
+                      <div class="status">
+                        <i class="fa-solid fa-clock"></i>
+                        <h4 id="h4">Active</h4>
+                      </div>
+                    </div>
+                    <div class="expired-container b2" *ngIf="i.Status == 2">
+                      <div class="title">
+                        <h2 class="fontWeight">{{ i.DocName }}</h2>
+                        <span class="icon">
+                          <img src="assets/icons/1x/list.png" />
+                          <i
+                            class="fa-solid fa-share"
+                            style="margin-left: 7px; margin-right: 7px"
+                          ></i>
+                          <i class="fa-solid fa-bookmark"></i>
+                        </span>
+                      </div>
+                      <h3 class="date cl2">
+                        {{ i.ExpiryDate | date: "mediumDate" }}
+                      </h3>
+                      <h5 class="text-start">Renewal In-Progress</h5>
+                      <div class="status">
+                        <i class="fa-solid fa-clock"></i>
+                        <h4 id="h4">Expiring in {{ i.DiffTotalDays }} days</h4>
+                      </div>
+                    </div>
+                    <div class="expired-container b1" *ngIf="i.Status == 3">
+                      <div class="title">
+                        <h2 class="fontWeight">{{ i.DocName }}</h2>
+                        <span class="icon">
+                          <img src="assets/icons/1x/list.png" />
+                          <i
+                            class="fa-solid fa-share"
+                            style="margin-left: 7px; margin-right: 7px"
+                          ></i>
+                          <i class="fa-solid fa-bookmark"></i>
+                        </span>
+                      </div>
+                      <h3 class="date cl1">
+                        {{ i.ExpiryDate | date: "mediumDate" }}
+                      </h3>
+                      <h5 class="text-start">Renewal In-Progress</h5>
+                      <div class="status">
+                        <i class="fa-solid fa-clock"></i>
+                        <h4 id="h4">Expired {{ i.DiffTotalDays }} days ago</h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ********** Calender-View End **************** -->
+      </div>
+
+      <!-- *************** Dashboard View Start *************** -->
+      <div class="d-flex justify-content-between">
+        <h3 class="fontWeight">Dashboard</h3>
+        <div class="d-flex align-items-center">
+          <button class="custom-btn" (click)="ViewCalender()">
+            <img src="assets/icons/1x/calendar1x.png" />
+            <span class="fontWeight fontSize ms-3">Calender View</span>
+          </button>
+        </div>
+      </div>
+      <div class="outer-container">
+        <div class="container col-md-4 col-sm-8 col-lg-3 content">
+          <div class="view">
+            <button class="custom-btn d-flex align-items-center" (click)="GetView(3)">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              <h4 class="grey-color" id="h4">View</h4>
+            </button>
+          </div>
+          <div class="documents">
+            <div class="document-icon expired-bg">
+              <i class="fa-solid fa-file expired-color"></i>
+            </div>
+            <span class="description">
+              <h3 class="number">{{ DashboardCount.ExpiredDoc }}</h3>
+              <h3 class="desc-text grey-color">Expired Documents</h3>
+            </span>
+          </div>
+        </div>
+
+        <div class="container col-md-4 col-sm-8 col-lg-3 content">
+          <div class="view">
+            <button class="custom-btn d-flex align-items-center" (click)="GetView(2)">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              <h4 class="grey-color" id="h4">View</h4>
+            </button>
+          </div>
+          <div class="documents">
+            <div class="document-icon expiring-bg">
+              <i class="fa-solid fa-file expiring-color"></i>
+            </div>
+            <span class="description">
+              <h3 class="number">{{ DashboardCount.ExpiringDoc }}</h3>
+              <h3 class="desc-text grey-color">Expiring Documents</h3>
+            </span>
+          </div>
+        </div>
+
+        <div class="container col-md-4 col-sm-8 col-lg-3 content">
+          <div class="view">
+            <button class="custom-btn d-flex align-items-center" (click)="GetView(1)">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              <h4 class="grey-color" id="h4">View</h4>
+            </button>
+          </div>
+          <div class="documents">
+            <div class="document-icon active-bg">
+              <i class="fa-solid fa-file active-color"></i>
+            </div>
+            <span class="description">
+              <h3 class="number">{{ DashboardCount.ActiveDoc }}</h3>
+              <h3 class="desc-text grey-color">Active Documents</h3>
+            </span>
+          </div>
+        </div>
+
+        <div class="container col-md-4 col-sm-8 col-lg-3 content">
+          <div class="view">
+            <button class="custom-btn d-flex align-items-center" routerLink="/client/TaskTodo">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              <h4 class="grey-color" id="h4">View</h4>
+            </button>
+          </div>
+          <div class="documents">
+            <div class="document-icon tasks-bg">
+              <img src="assets/icons/1x/list.png" />
+            </div>
+            <span class="description">
+              <h3 class="number">{{ DashboardCount.TaskCount }}</h3>
+              <h3 class="desc-text grey-color">Tasks to do</h3>
+            </span>
+          </div>
+        </div>
+
+        <div class="container col-md-4 col-sm-8 col-lg-3 content">
+          <div class="view">
+            <button class="custom-btn d-flex align-items-center">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              <h4 class="grey-color" id="h4">View</h4>
+            </button>
+          </div>
+          <div class="documents">
+            <div class="document-icon sharer-bg">
+              <i class="fa-solid fa-user-group"></i>
+            </div>
+            <span class="description">
+              <h3 class="number">{{ DashboardCount.SharerCount }}</h3>
+              <h3 class="desc-text grey-color">Sharer</h3>
+            </span>
+          </div>
+        </div>
+
+        <div class="container col-md-4 col-sm-8 col-lg-3 content">
+          <div class="view">
+            <button class="custom-btn d-flex align-items-center" (click)="GetView(4)">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              <h4 class="grey-color" id="h4">View</h4>
+            </button>
+          </div>
+          <div class="documents">
+            <div class="document-icon reminder-bg">
+              <i class="fa-solid fa-bell-slash"></i>
+            </div>
+            <span class="description">
+              <h3 class="number">{{ DashboardCount.ReminderOffCount }}</h3>
+              <h3 class="desc-text grey-color">Reminder Off</h3>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- *************** Dashboard View End *************** -->
+
+      <div class="underline"></div>
+
+      <!-- *************** Documents View Start*************** -->
+
+      <span class="add-doc mt-5">
+        <h3>Documents</h3>
+        <span class="display">
+          <button class="add-document-btn" routerLink="/client/addDocument">
+            <i class="fa-solid fa-circle-plus fa-3x"></i>
+          </button>
+          <h4 class="fontWeight fontSize m-0">Add Documents</h4>
+        </span>
+      </span>
+
+      <div class="row g-5 mt-0">
+        <div class="col col-12 col-md-6 col-sm-8 col-lg-4">
+          <h5 class="fontWeight">Expired ({{ ExpiredDocCount }})</h5>
+          <ng-container
+            *ngIf="ExpiredDocCount; then ShowExpiredDocs; else ShowExpiredMsg"
+          >
+          </ng-container>
+          <ng-template #ShowExpiredDocs>
+            <div class="row d-flex flex-column mt-1">
+              <div class="mt-4" *ngFor="let i of ExpiredDocList">
+                <div class="custom-btn main-color w-100 p-0">
+                  <div class="expired-container b1">
+                    <div class="title">
+                      <h2 class="fontWeight">{{ i.DocName }}</h2>
+                      <span class="icon">
+                        <a href="" (click)="onShowDocumentDetails(i.Id)"><img src="assets/icons/1x/list.png" /></a>
+                        
+                        <i class="fa-solid fa-share" style="margin-left: 7px; margin-right: 7px"></i>
+                        <i class="fa-solid fa-bookmark"></i>
+                      </span>
+                    </div>
+                    <h3 class="date cl1">
+                      {{ i.ExpiryDate | date: "mediumDate" }}
+                    </h3>
+                    <h5 class="text-start">Renewal In-Progress</h5>
+                    <div class="status">
+                      <i class="fa-solid fa-clock"></i>
+                      <h4 id="h4" *ngif="i.DiffTotalDays!=0">Expired {{ i.DiffTotalDays }} days ago</h4>
+                      <h4 id="h4" *ngif="i.DiffTotalDays==0">Expired Today</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template #ShowExpiredMsg>
+            <div class="mt-5 fontSize">No Expired Documents</div>
+          </ng-template>
+        </div>
+        <div class="col col-12 col-md-6 col-sm-8 col-lg-4">
+          <h5 class="fontWeight">Expiring ({{ ExpiringDocCount }})</h5>
+          <ng-container *ngIf="ExpiringDocCount; then ShowExpiringDocs; else ShowExpiringMsg"> </ng-container>
+          <ng-template #ShowExpiringDocs>
+            <div *ngIf="ExpiringDocCount" class="row d-flex flex-column mt-1">
+              <div class="mt-4" *ngFor="let i of ExpiringDocList">
+                <div class="custom-btn main-color w-100 p-0">
+                  <div class="expired-container b2">
+                    <div class="title">
+                      <h2 class="fontWeight">{{ i.DocName }}</h2>
+                      <span class="icon">
+                        <a href="" (click)="onShowDocumentDetails(i.Id)"><img src="assets/icons/1x/list.png" /></a>
+                        
+                        <i class="fa-solid fa-share" style="margin-left: 7px; margin-right: 7px"></i>
+                        <i class="fa-solid fa-bookmark"></i>
+                      </span>
+                    </div>
+                    <h3 class="date cl2">
+                      {{ i.ExpiryDate | date: "mediumDate" }}
+                    </h3>
+                    <h5 class="text-start">Renewal In-Progress</h5>
+                    <div class="status">
+                      <i class="fa-solid fa-clock"></i>
+                      <h4 id="h4">Expiring in {{ i.DiffTotalDays }} days</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template #ShowExpiringMsg>
+            <div class="mt-5 fontSize">No Expiring Documents</div>
+          </ng-template>
+        </div>
+        <div class="col col-12 col-md-6 col-sm-8 col-lg-4">
+          <h5 class="fontWeight">Active ({{ ActiveDocCount }})</h5>
+          <ng-container *ngIf="ActiveDocCount; then ShowActiveDocs; else ShowActiveMsg" >
+          </ng-container>
+          <ng-template #ShowActiveDocs>
+            <div class="row d-flex flex-column mt-1">
+              <div class="mt-4" *ngFor="let i of ActiveDocList">
+                <div class="custom-btn main-color w-100 p-0">
+                  <div class="expired-container b3">
+                    <div class="title">
+                      <h2 class="fontWeight">{{ i.DocName }}</h2>
+                      <span class="icon">
+                        <a style="cursor:pointer;" (click)="onShowDocumentDetails(i.Id)"><img src="assets/icons/1x/list.png" /></a>
+                        <a style="cursor:pointer;" (click)="onShowDocumentDetails(i.Id)"><i  class="fa-solid fa-share" style="margin-left: 7px; margin-right: 7px"></i></a>
+                        <a style="cursor:pointer;" *ngIf="i.Isbookmark==true"  (click)="addBookmark(i.Id,false)"><i  class="fa-solid fa-bookmark"></i></a>
+                        <a style="cursor:pointer;" *ngIf="i.Isbookmark==false" (click)="addBookmark(i.Id,true)"><i  class="far fa-bookmark"></i></a>
+                        
+                      </span>
+                    </div>
+                    <h3 class="date cl3">
+                      {{ i.ExpiryDate | date: "mediumDate" }}
+                    </h3>
+                    <h5 class="text-start">Pending Renewal</h5>
+                    <div class="status">
+                      <i class="fa-solid fa-clock"></i>
+                      <h4 id="h4">Active</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template #ShowActiveMsg>
+            <div class="mt-5 fontSize">No Active Documents</div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <!-- *************** Documents View End *************** -->
+
+    <!-- *************** Document Details *************** -->
+
+    <div *ngIf="showDocumentDetails" class="document-detail">
+      <div id="header">
+        <div class="x-mark">
+          <button class="custom-btn" (click)="onHideDocumentDetails()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div
+          class="d-flex flex-column align-items-center justify-content-center mt-4"
+        >
+          <div class="heading d-flex align-items-center">
+            <div class="dot"></div>
+            <h6
+              class="mx-2 mt-2 Pending-color"
+              *ngIf="DocumentData.DiffTotalDays > 0"
+            >
+              Pending Renewal
+            </h6>
+            <h6
+              class="mx-2 mt-2 Pending-color"
+              *ngIf="DocumentData.DiffTotalDays < 1"
+            >
+              Renewal In-Progress
+            </h6>
+            <i class="fa fa-angle-down"></i>
+          </div>
+          <h3>{{ DocumentData.DocName }}</h3>
+          <div class="d-flex align-items-center mt-2">
+            <i class="fa-solid fa-clock"></i>
+            <h6 class="ms-1 mb-0" *ngIf="DocumentData.DiffTotalDays > 0">
+              Expiring in <strong>{{ DocumentData.DiffTotalDays }}</strong> Days
+            </h6>
+            <h6 class="ms-1 mb-0" *ngIf="DocumentData.DiffTotalDays < 1">
+              Expired {{ DocumentData.DiffTotalDays }} days ago
+            </h6>
+          </div>
+        </div>
+        <nav
+          class="nav nav-tabs d-flex justify-content-center mt-3"
+          id="nav-tab"
+          role="tablist"
+        >
+          <a
+            class="nav-link active"
+            id="nav-Details-tab"
+            data-bs-toggle="tab"
+            href="#nav-Details"
+            role="tab"
+            aria-controls="nav-Details"
+            aria-selected="true"
+            >Details</a
+          >
+          <a
+            class="nav-link"
+            id="nav-Tasks-tab"
+            data-bs-toggle="tab"
+            href="#nav-Tasks"
+            role="tab"
+            aria-controls="nav-Tasks"
+            aria-selected="false"
+            >Tasks</a
+          >
+          <a
+            class="nav-link"
+            id="nav-Sharing-tab"
+            data-bs-toggle="tab"
+            href="#nav-Sharing"
+            role="tab"
+            aria-controls="nav-Sharing"
+            tabindex="-1"
+            aria-disabled="true"
+            >Sharing</a
+          >
+          <a
+            class="nav-link"
+            id="nav-Notes-tab"
+            data-bs-toggle="tab"
+            href="#nav-Notes"
+            role="tab"
+            aria-controls="nav-Notes"
+            tabindex="-1"
+            aria-disabled="true"
+            >Notes</a
+          >
+        </nav>
+      </div>
+      <div class="Main-container">
+        <div class="tabs-content">
+          <div class="tab-content" id="nav-tabContent">
+            <div
+              class="tab-pane fade show active"
+              id="nav-Details"
+              role="tabpanel"
+              aria-labelledby="nav-Details-tab"
+            >
+              <!-- ***************  Details Edit View Start *************** -->
+              <div *ngIf="showDetailsEditView">
+                <h4 class="inputLabel">Expiration Date</h4>
+                <p class="inputValue">
+                  {{ DocumentData.ExpiryDate | date: "mediumDate" }}
+                </p>
+                <div class="d-flex">
+                  <div class="d-flex flex-column w-50">
+                    <h4 class="inputLabel">Issue Date</h4>
+                    <p class="inputValue" *ngIf="DocumentData.IssueDate">
+                      {{ DocumentData.IssueDate | date: "mediumDate" }}
+                    </p>
+                    <p
+                      class="inputValue"
+                      *ngIf="DocumentData.IssueDate == null"
+                    >
+                      ---
+                    </p>
+                  </div>
+                  <div class="d-flex flex-column w-50">
+                    <h4 class="inputLabel">Valid For</h4>
+                    <p  class="inputValue" *ngIf="DocumentData.ValidFor != 'null'"
+                    >
+                      {{ DocumentData.ValidFor }} {{DisplayValidForPeriod}}
+                    </p>
+                    <p
+                      class="inputValue"
+                      *ngIf="DocumentData.ValidFor == 'null'"
+                    >
+                      ---
+                    </p>
+                  </div>
+                </div>
+
+                <div class="d-flex">
+                  <div class="d-flex flex-column w-50">
+                    <h4 class="inputLabel">Document Type</h4>
+                    <p class="inputValue" *ngIf="DocumentData.DocTypeTitle">
+                      {{ DocumentData.DocTypeTitle }}
+                    </p>
+                    <p
+                      class="inputValue"
+                      *ngIf="DocumentData.DocTypeTitle == null"
+                    >
+                      ---
+                    </p>
+                  </div>
+                  <div class="d-flex flex-column w-50">
+                    <h4 class="inputLabel">Folder</h4>
+                    <p class="inputValue" *ngIf="DocumentData.FolderName">
+                      {{ DocumentData.FolderName }}
+                    </p>
+                    <p
+                      class="inputValue"
+                      *ngIf="DocumentData.FolderName == null"
+                    >
+                      ---
+                    </p>
+                  </div>
+                </div>
+
+                <div class="d-flex">
+                  <div class="d-flex flex-column w-50">
+                    <h4 class="inputLabel">Document Owner</h4>
+                    <p class="inputValue" *ngIf="DocumentData.DocOwnerName">
+                      {{ DocumentData.DocOwnerName }}
+                    </p>
+                    <p
+                      class="inputValue"
+                      *ngIf="DocumentData.DocOwnerName == null"
+                    >
+                      ---
+                    </p>
+                  </div>
+                  <div class="d-flex flex-column w-50">
+                    <h4 class="inputLabel">Document Number</h4>
+                    <p class="inputValue" *ngIf="DocumentData.DocNumber">
+                      {{ DocumentData.DocNumber }}
+                    </p>
+                    <p
+                      class="inputValue"
+                      *ngIf="DocumentData.DocNumber == null"
+                    >
+                      ---
+                    </p>
+                  </div>
+                </div>
+
+                <div class="d-flex">
+                  <div class="d-flex flex-column w-50">
+                    <h4 class="inputLabel">State</h4>
+                    <p class="inputValue" *ngIf="DocumentData.StateName">
+                      {{ DocumentData.StateName }}
+                    </p>
+                    <p
+                      class="inputValue"
+                      *ngIf="DocumentData.StateName == null"
+                    >
+                      ---
+                    </p>
+                  </div>
+                  <div class="d-flex flex-column w-50">
+                    <h4 class="inputLabel">Country</h4>
+                    <p class="inputValue" *ngIf="DocumentData.CountryName">
+                      {{ DocumentData.CountryName }}
+                    </p>
+                    <p
+                      class="inputValue"
+                      *ngIf="DocumentData.CountryName == null"
+                    >
+                      ----
+                    </p>
+                  </div>
+                </div>
+
+                <div *ngIf="DocumentData.reminderList.length > 0">
+                  <div class="d-flex align-items-center">
+                    <img src="assets/icons/1.5x/reminder.png" />
+
+                    <h4 id="reminder" class="my-4">Reminder</h4>
+                  </div>
+                  <h4 class="inputLabel">Remind me at</h4>
+                  <div *ngFor="let obj of DocumentData.reminderList">
+                    <p class="inputValue" *ngIf="obj.RemindValue == 1">
+                      6 Months Before Expiration
+                    </p>
+                    <p class="inputValue" *ngIf="obj.RemindValue == 2">
+                      3 Months Before Expiration
+                    </p>
+                    <p class="inputValue" *ngIf="obj.RemindValue == 3">
+                      1 Months Before Expiration
+                    </p>
+                    <p class="inputValue" *ngIf="obj.RemindValue == 4">
+                      2 Weeks Before Expiration
+                    </p>
+                    <p class="inputValue" *ngIf="obj.RemindValue == 5">
+                      {{obj.CustomRemindValue}} {{obj.CustomRemindPeriod}} Before Expiration
+                    </p>
+                    
+
+                  </div>
+
+                  <h4 class="inputLabel">Send to</h4>
+                  <div *ngFor="let obj of DocumentData.sendOnList">
+                    <p class="inputValue" *ngIf="obj.SendOn == 1">Email</p>
+                    <p class="inputValue" *ngIf="obj.SendOn == 2">Phone</p>
+                  </div>
+                </div>
+
+                <div *ngIf="DocumentData.attachmentList.length > 0">
+                  <div class="d-flex align-items-center mt-4">
+                    <i class="fa-solid fa-paperclip"></i>
+                    <h6 class="ms-2 m-0 Attachments">Attachments</h6>
+                  </div>
+                  <p>Attachments here</p>
+                 <div *ngFor="let obj of DocumentData.attachmentList">
+                    <img src="{{ baseUrl }}{{ obj.AttachmentUrl }}" />
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                  <button
+                    type="button"
+                    class="edit-btn"
+                    (click)="onDetailsEditClick()">Edit</button>
+                </div>
+              </div>
+              <!-- *************** Details Edit View End *************** -->
+
+              <!-- *************** Details Save View Start *************** -->
+              <div *ngIf="showDetailsSaveView">
+                <form
+                  name="form"
+                  (ngSubmit)="f.form.valid && updateDocument(f)"
+                  #f="ngForm"
+                  novalidate
+                >
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      class="form-control username-input"
+                      name="DocName"
+                      [(ngModel)]="DocumentData.DocName"
+                      #DocName="ngModel"
+                    />
+                    <label for="floatingInput" class="label"
+                      >Document Name
+                      <i
+                        class="fa fa-asterisk"
+                        style="
+                          font-size: 14px;
+                          margin-bottom: 5px;
+                          margin-left: 3px;
+                          color: red;
+                        "
+                      ></i>
+                    </label>
+                  </div>
+                  <div class="col-12">
+                    <div class="d-flex justify-content-between">
+                      <div
+                        class="form-floating mb-3 col-5 d-flex"
+                        style="width: 45%"
+                      >
+                        <input
+                          type="date"
+                          class="form-control username-input"
+                          name="ExpiryDate"
+                          [(ngModel)]="DocumentData.ExpiryDate"
+                          required
+                          #ExpiryDate="ngModel"
+                        />
+                        <label for="floatingInput" class="label"
+                          >Expiration Date
+                          <i
+                            class="fa fa-asterisk"
+                            style="
+                              font-size: 14px;
+                              margin-bottom: 5px;
+                              margin-left: 3px;
+                              color: red;
+                            "
+                          ></i>
+                        </label>
+                      </div>
+                      <div
+                        class="form-floating mb-3 col-5 d-flex"
+                        style="width: 45%"
+                      >
+                        <select
+                          class="form-control username-input"
+                          name="DocTypeId"
+                          [(ngModel)]="DocumentData.DocTypeId"
+                          required
+                          #DocTypeId="ngModel"
+                        >
+                          <option value="">Choose...</option>
+                          <option
+                            *ngFor="let obj of docTypeList"
+                            [ngValue]="obj.Id"
+                          >
+                            {{ obj.Title }}
+                          </option>
+                        </select>
+                        <label for="floatingInput" class="label"
+                          >Document Type
+                          <i
+                            class="fa fa-asterisk"
+                            style="
+                              font-size: 14px;
+                              margin-bottom: 5px;
+                              margin-left: 3px;
+                              color: red;
+                            "
+                          ></i
+                        ></label>
+                        <div class="input-action">
+                          <div
+                            class="btn-group align-items-center action-padding opacity"
+                          >
+                            <button
+                              type="button"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                              <i class="fa fa-angle-down"></i>
+                              <span class="visually-hidden"
+                                >Toggle Dropdown</span
+                              >
+                            </button>
+                            <ul class="dropdown-menu">
+                              <li>
+                                <a class="dropdown-item" href="#">Action</a>
+                              </li>
+                              <li>
+                                <a class="dropdown-item" href="#"
+                                  >Another action</a
+                                >
+                              </li>
+                              <li>
+                                <a class="dropdown-item" href="#"
+                                  >Something else here</a
+                                >
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <div
+                        class="form-floating mb-3 d-flex col-3"
+                        style="width: 25%"
+                      >
+                        <input
+                          type="date"
+                          class="form-control username-input"
+                          name="IssueDate"
+                          [(ngModel)]="DocumentData.IssueDate"
+                          #IssueDate="ngModel"
+                        />
+                        <label for="floatingInput" class="label"
+                          >Issue Date</label
+                        >
+                      </div>
+                      <div
+                        class="form-floating mb-3 d-flex col-5"
+                        style="width: 15%; margin-left: -5%"
+                      >
+                        <input
+                          style="margin-right: 15px; width: 40%"
+                          type="number"
+                          class="form-control username-input"
+                          name="ValidFor"
+                          min="0"
+                          [(ngModel)]="DocumentData.ValidFor"
+                          #ValidFor="ngModel"
+                        />
+
+                        <select
+                          style="width: 60%"
+                          class="form-control username-input"
+                          name="ValidForPeriod"
+                          [(ngModel)]="DocumentData.ValidForPeriod"
+                          #ValidForPeriod="ngModel"
+                        >
+                          <option value="Years">Years</option>
+                          <option value="Months">Months</option>
+                          <option value="Weeks">Weeks</option>
+                        </select>
+                      </div>
+                      <div
+                        class="col-4 form-floating mb-3 d-flex"
+                        style="width: 45%"
+                      >
+                        <select
+                          class="form-control username-input"
+                          name="FolderId"
+                          [(ngModel)]="DocumentData.FolderId"
+                          required
+                          #FolderId="ngModel"
+                        >
+                          <option value="">Choose...</option>
+                          <option
+                            *ngFor="let obj of userFolderList"
+                            [ngValue]="obj.Id"
+                          >
+                            {{ obj.Name }}
+                          </option>
+                        </select>
+                        <label for="floatingInput" class="label"
+                          >Move to Folder
+                          <i
+                            class="fa fa-asterisk"
+                            style="
+                              font-size: 14px;
+                              margin-bottom: 5px;
+                              margin-left: 3px;
+                              color: red;
+                            "
+                          ></i
+                        ></label>
+                        <div class="input-action">
+                          <div
+                            class="btn-group align-items-center action-padding opacity"
+                          >
+                            <button
+                              type="button"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                              <i class="fa fa-angle-down"></i>
+                              <span class="visually-hidden"
+                                >Toggle Dropdown</span
+                              >
+                            </button>
+                            <ul class="dropdown-menu">
+                              <li>
+                                <a class="dropdown-item" href="#">Action</a>
+                              </li>
+                              <li>
+                                <a class="dropdown-item" href="#"
+                                  >Another action</a
+                                >
+                              </li>
+                              <li>
+                                <a class="dropdown-item" href="#"
+                                  >Something else here</a
+                                >
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <h3 class="mt-5 fs-4">Additional Information (Optional)</h3>
+                  <div class="col-12">
+                    <div class="d-flex justify-content-between">
+                      <div
+                        class="form-floating mb-3 col-5 d-flex"
+                        style="width: 45%"
+                      >
+                        <input
+                          type="text"
+                          class="form-control username-input"
+                          name="DocOwnerName"
+                          [(ngModel)]="DocumentData.DocOwnerName"
+                          #DocOwnerName="ngModel"
+                        />
+
+                        <label for="floatingInput" class="label"
+                          >Document Owner
+                        </label>
+                      </div>
+                      <div
+                        class="form-floating mb-3 col-5 d-flex"
+                        style="width: 45%"
+                      >
+                        <input
+                          type="email"
+                          class="form-control username-input"
+                          name="DocNumber"
+                          [(ngModel)]="DocumentData.DocNumber"
+                          #DocNumber="ngModel"
+                        />
+                        <label for="floatingInput" class="label"
+                          >Document Number</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="d-flex justify-content-between">
+                      <div
+                        class="form-floating mb-3 col-5 d-flex"
+                        style="width: 45%"
+                      >
+                        <select
+                          class="form-control username-input"
+                          name="StateId"
+                          [(ngModel)]="DocumentData.StateId"
+                          #StateId="ngModel"
+                        >
+                          <option value="">Choose...</option>
+                          <option
+                            *ngFor="let obj of cityList"
+                            [ngValue]="obj.Id"
+                          >
+                            {{ obj.FullName }}
+                          </option>
+                        </select>
+                        <div class="input-action">
+                          <div
+                            class="btn-group align-items-center action-padding opacity"
+                          >
+                            <button
+                              type="button"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                              <i class="fa fa-angle-down"></i>
+                              <span class="visually-hidden"
+                                >Toggle Dropdown</span
+                              >
+                            </button>
+                            <ul class="dropdown-menu">
+                              <li>
+                                <a class="dropdown-item" href="#">Action</a>
+                              </li>
+                              <li>
+                                <a class="dropdown-item" href="#"
+                                  >Another action</a
+                                >
+                              </li>
+                              <li>
+                                <a class="dropdown-item" href="#"
+                                  >Something else here</a
+                                >
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <label for="floatingInput" class="label">State </label>
+                      </div>
+                      <div
+                        class="form-floating mb-3 col-5 d-flex"
+                        style="width: 45%"
+                      >
+                        <select
+                          class="form-control username-input"
+                          name="CountryId"
+                          [(ngModel)]="DocumentData.CountryId"
+                          #CountryId="ngModel"
+                          (change)="getStateDDL()"
+                        >
+                          <option value="">Choose...</option>
+                          <option
+                            *ngFor="let obj of countryList"
+                            [ngValue]="obj.Id"
+                          >
+                            {{ obj.FullName }}
+                          </option>
+                        </select>
+                        <label for="floatingInput" class="label"
+                          >Country
+                        </label>
+                        <div class="input-action">
+                          <div
+                            class="btn-group align-items-center action-padding opacity"
+                          >
+                            <button
+                              type="button"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                              <i class="fa fa-angle-down"></i>
+                              <span class="visually-hidden"
+                                >Toggle Dropdown</span
+                              >
+                            </button>
+                            <ul class="dropdown-menu">
+                              <li>
+                                <a class="dropdown-item" href="#">Action</a>
+                              </li>
+                              <li>
+                                <a class="dropdown-item" href="#"
+                                  >Another action</a
+                                >
+                              </li>
+                              <li>
+                                <a class="dropdown-item" href="#"
+                                  >Something else here</a
+                                >
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="form-check form-switch d-flex align-items-center justify-content-between mt-5"
+                  >
+                    <label
+                      id="notification-label"
+                      class="form-check-label"
+                      for="flexSwitchCheckChecked"
+                      >REMINDER</label
+                    >
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      role="switch"
+                      name="RemindMe"
+                      [(ngModel)]="DocumentData.RemindMe"
+                      #RemindMe="ngModel"
+                      (change)="ChangeRemindMe(DocumentData.RemindMe)"
+                      checked
+                    />
+                  </div>
+                  <div
+                    class="d-flex justify-content-between"
+                    *ngIf="isRemindSessionShow"
+                  >
+                    <div class="col-6" style="width: 45%">
+                      <h6 class="mt-4 grey-color">Remind me at</h6>
+
+                      <ul *ngFor="let obj of RemindOnList" class="no-bullets">
+                        <li>
+                          <input
+                            type="checkbox"
+                            [(ngModel)]="obj.selected"
+                            name="{{ obj.RemindValue }}"
+                            value="{{ obj.RemindValue }}"
+                            (change)="CheckRemindOn(obj)"
+                          />
+                          <label class="ms-3 grey-color">{{ obj.name }}</label>
+                        </li>
+                      </ul>
+                      <div
+                        class="days-input d-flex align-items-center"
+                        *ngIf="isRemindCustomShow"
+                      >
+                        <div class="d-flex align-items-baseline">
+                          <button  class="custom-btn fs-2" id="account-btn" type="button"  (click)="decrementCriteria()"> - </button>
+                          <input id="reminder-input"type="number" class="mx-2 text-center username-input reminder-input1" name="ReminderCustomCount"  [(ngModel)]="DocumentData.ReminderCustomCount" #ReminderCustomCount="ngModel"/>
+                          <button  class="custom-btn fs-2"  id="account-btn" type="button" (click)="incrementCriteria()" > + </button>
+                        </div>
+                        <select
+                          class="form-control username-input mx-3 reminder-input2"
+                          name="ReminderCustomPeriod"
+                          [(ngModel)]="DocumentData.ReminderCustomPeriod"
+                          #ReminderCustomPeriod="ngModel"
+                        >
+                          <option value="Weeks">Weeks Before</option>
+
+                          <option value="Months">Months Before</option>
+                        </select>
+                        <div class="select-action">
+                          <i class="fa fa-angle-down"></i>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-6" style="width: 45%">
+                      <h6 class="mt-4 grey-color">Send to</h6>
+
+                      <ul *ngFor="let obj of sendonList" class="no-bullets">
+                        <li>
+                          <input
+                            type="checkbox"
+                            [(ngModel)]="obj.selected"
+                            name="{{ obj.SendOn }}"
+                            value="{{ obj.SendOn }}"
+                            (change)="CheckSendOn(obj)"
+                          />
+                          <label class="ms-3">{{ obj.name }}</label>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <h6 class="mt-5">ATTACHMENT (OPTIONAL)</h6>
+                  <img
+                    *ngFor="let url of images"
+                    [src]="url"
+                    height="150"
+                    width="200px"
+                    style="margin: 3px"
+                  />
+                  <br />
+
+                  <div class="container-fluid mt-3 p-0">
+                    <div class="upload-files">
+                      <i
+                        class="fa-solid fa-arrow-up-from-bracket mt-5 mb-2"
+                      ></i>
+                      <h6 class="mb-5 light-color">
+                        Drag and drop files to here or
+                        <span class="btn btn-file"
+                          >browse<input
+                            type="file"
+                            (change)="selectFile($event)"
+                            multiple
+                          />
+                        </span>
+                      </h6>
+                    </div>
+                  </div>
+                  <div class="save-cancel-btn">
+                    <button type="button"  class="cancel-btn"  (click)="onDetailsCancelClick()" > Cancel </button>
+                    <button type="submit" class="save-btn">Save</button>
+                  </div>
+                </form>
+               
+              </div>
+
+              <!-- *************** Details Save View End *************** -->
+            </div>
+
+            <!-- *************** Document Details Tasks View Start *************** -->
+
+            <div
+              class="tab-pane fade"
+              id="nav-Tasks"
+              role="tabpanel"
+              aria-labelledby="nav-Tasks-tab"
+            >
+              <div class="d-flex align-items-center">
+                <img src="assets/icons/1x/list.png" id="task-icon" />
+                <h5 class="all-task fontSize">
+                  All Tasks <span>{{ taskList.length }}</span>
+                </h5>
+              </div>
+              <div
+                class="d-flex align-items-center justify-content-between mt-4 mb-4 ms-4"
+              >
+                <div class="d-flex">
+                  <button class="assign-btn" (click)="GetTaskDataTable()">
+                    All
+                  </button>
+                  <button
+                    class="assign-btn ms-3"
+                    *ngFor="let obj of assignUserList"
+                    (click)="AssignedToFilter(obj.UserId)"
+                  >
+                    Assigned to {{ obj.Name }}
+                  </button>
+                </div>
+
+                <div class="d-flex align-items-center">
+                  <h6 class="m-0">Add Task</h6>
+                  <button class="custom-btn" (click)="onAddTask()">
+                    <img src="assets/icons/1x/add.png" id="add-task" />
+                  </button>
+                </div>
+              </div>
+
+              <!-- ********** ADD TASK View ********** -->
+              <div *ngIf="showAddTask">
+                <form
+                  name="form"
+                  (ngSubmit)="t.form.valid && AddTask(t)"
+                  #t="ngForm"
+                  novalidate
+                >
+                  <div class="col">
+                    <div class="form-floating mb-3 col-5 d-flex w-100">
+                      <input
+                        type="text"
+                        class="form-control username-input"
+                        id="floatingInput"
+                        placeholder="Task Name"
+                        name="TaskName"
+                        required
+                        [(ngModel)]="Task.TaskName"
+                        #TaskName="ngModel"
+                      />
+                      <label for="floatingInput" class="label"
+                        >Task Name
+                      </label>
+                    </div>
+                    <div
+                      class="alert alert-danger"
+                      role="alert"
+                      *ngIf="TaskName.errors && t.submitted"
+                    >
+                      Task Name is required!
+                    </div>
+                  </div>
+                  <div class="row g-5 mb-3">
+                    <div class="col">
+                      <div class="form-floating w-100">
+                        <select
+                          class="form-control username-input"
+                          name="AssignTo"
+                          required
+                          [(ngModel)]="Task.AssignTo"
+                          #AssignTo="ngModel"
+                        >
+                          <option value="">Choose...</option>
+                          <option value="{{ DocumentData.CreatedBy }}">
+                            itself
+                          </option>
+                          <option
+                            *ngFor="let obj of sharerUserList"
+                            [ngValue]="obj.UserId"
+                          >
+                            {{ obj.Name }}
+                          </option>
+                        </select>
+                        <label for="floatingSelect" class="label"
+                          >Assign to
+                        </label>
+                      </div>
+                      <div
+                        class="alert alert-danger"
+                        role="alert"
+                        *ngIf="AssignTo.errors && t.submitted"
+                      >
+                        Assign To is required!
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-floating col-5 d-flex w-100">
+                        <input
+                          type="date"
+                          class="form-control username-input"
+                          id="floatingInput"
+                          placeholder="Due Date"
+                          name="DueDate"
+                          required
+                          [(ngModel)]="Task.DueDate"
+                          #DueDate="ngModel"
+                        />
+                        <label for="floatingInput" class="label"
+                          >Due Date
+                        </label>
+                      </div>
+                      <div
+                        class="alert alert-danger"
+                        role="alert"
+                        *ngIf="DueDate.errors && t.submitted"
+                      >
+                        Due Date is required!
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- <div class="row g-5 mb-3" *ngIf="showNewAssignTo">
+                    <div class="col">
+                      <div class="form-floating mb-3 w-100">
+                        <input
+                          type="text"
+                          class="form-control username-input"
+                          id="floatingInput"
+                          placeholder="Name"
+                          name="AssignToName"
+                          [(ngModel)]="newSharer.Name"
+                          #AssignToName="ngModel"
+                        />
+
+                        <label for="floatingInput" class="label">Name </label>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-floating mb-3 w-100">
+                        <input
+                          type="email"
+                          class="form-control username-input"
+                          id="floatingInput"
+                          placeholder="email"
+                          name="AssignToEmail"
+                          [(ngModel)]="newSharer.Email"
+                          #AssignToEmail="ngModel"
+                          
+                        />
+
+                        <label for="floatingInput" class="label"
+                          >Email Address</label
+                        >
+                      </div>
+                    </div>
+                  </div> -->
+                  <h6 class="fontWeight">Auto Sharing</h6>
+                  <h6>Anyone you assign to can view document</h6>
+                  <div class="d-flex justify-content-center mb-3">
+                    <button type="submit" class="save-btn">Save</button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- ********** ALL TASKS View ********** -->
+
+              <div *ngIf="alltasks" class="all-task-list">
+                <div
+                  class="task-info d-flex justify-content-between mb-3"
+                  *ngFor="let obj of taskList"
+                >
+                  <div class="d-flex align-items-baseline">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="formCheckDefault1"
+                      />
+                      <label class="form-check-label" for="formCheckDefault1">
+                        <span class="d-flex flex-column ms-2">
+                          <h6 class="fontWeight">
+                            {{ obj.TaskName }}
+                          </h6>
+                          <h6 class="grey-color font-sm">
+                            Assign to: {{ obj.AssignToName }}
+                          </h6>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div id="task-status">
+                    <h6 class="due-time grey-color">
+                      Due time: {{ obj.DueDate | date: "mediumDate" }}
+                    </h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- *************** Document Details Tasks View End *************** -->
+
+            <!-- *************** Document Details Sharing View Start *************** -->
+
+            <div
+              class="tab-pane fade"
+              id="nav-Sharing"
+              role="tabpanel"
+              aria-labelledby="nav-Sharing-tab"
+            >
+              <div class="d-flex mt-5">
+                <i class="fa-solid fa-user-group"></i>
+                <h6 class="ms-2">Sharing {{ sharedDocList.length }}</h6>
+              </div>
+              <div class="d-flex justify-content-end align-items-end mt-4">
+                <h6>Share with</h6>
+                <a
+                  style="cursor: pointer"
+                  data-bs-toggle="modal"
+                  data-bs-target="#docShareModal"
+                  ><i class="fa-solid fa-circle-plus fa-2x ms-2"></i
+                ></a>
+              </div>
+              <div class="sharer-title mt-4" *ngFor="let obj of sharedDocList">
+                <div class="profile d-flex align-items-center">
+                  <img src="assets/Images/add.png" />
+                  <span class="profile-info">
+                    <h6 class="sharer-name">{{ obj.UserName }}</h6>
+                    <h6 class="m-0">{{ obj.userEmail }}</h6>
+                  </span>
+                </div>
+                <div class="d-flex align-items-center">
+                  <div id="status">
+                    <h6 class="view-access">{{ obj.AccessTitle }} Access</h6>
+                  </div>
+                  <div class="btn-group align-items-center action-padding">
+                    <button
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <i class="fa-solid fa-ellipsis-vertical"></i>
+                      <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-style">
+                      <li><a class="dropdown-item" href="#">Edit</a></li>
+                      <li>
+                        <a class="dropdown-item delete-color" href="#"
+                          >Delete</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- *************** Document Details Sharing View End *************** -->
+
+            <!-- ***** Notes View Start **** -->
+
+            <div
+              class="tab-pane fade"
+              id="nav-Notes"
+              role="tabpanel"
+              aria-labelledby="nav-Notes-tab"
+            >
+              <div class="d-flex mt-5">
+                <i class="fas fa-sticky-note"></i>
+                <h6 class="ms-2">Notes</h6>
+              </div>
+
+              <!-- ******** Edit View ***** -->
+              <div *ngIf="noteseditView">
+                <h6 class="mt-3 mb-5 ms-4">
+                  {{ DocumentData.Notes }}
+                </h6>
+                <div class="d-flex justify-content-center">
+                  <button
+                    type="button"
+                    class="save-btn"
+                    (click)="NotesEditClick()"
+                  >
+                    Edit
+                  </button>
+                </div>
+              </div>
+
+              <!-- ******** Save View ***** -->
+              <div *ngIf="notesSaveView">
+                <form
+                  name="form"
+                  (ngSubmit)="n.form.valid && SaveNote(n)"
+                  #n="ngForm"
+                  novalidate
+                >
+                  <div class="mt-3 mb-2 d-flex justify-content-end">
+                    <h6>0/200</h6>
+                  </div>
+                  <div class="form">
+                    <textarea
+                      class="form-control"
+                      placeholder=""
+                      style="height: 130px"
+                      spellcheck="false"
+                      data-ms-editor="true"
+                      name="Note"
+                      required
+                      [(ngModel)]="DocumentData.Notes"
+                      #Note="ngModel"
+                    ></textarea>
+                    <div
+                      class="alert alert-danger"
+                      role="alert"
+                      *ngIf="Note.errors && n.submitted"
+                    >
+                      Note is required!
+                    </div>
+                  </div>
+                  <div class="save-cancel-btn">
+                    <button
+                      type="button"
+                      class="cancel-btn"
+                      (click)="onNotesCancelClick()"
+                    >
+                      Cancel
+                    </button>
+                    <button type="submit" class="save-btn">Save</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- ***** Notes View End **** -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #content let-modal>
+    <div class="modal-content">
+      <div
+        class="modal-body d-flex flex-column align-items-center justify-content-center"
+      >
+        <h5 class="modal-title mb-2 text-center main-color">
+          Trinity, Welcome to Xpiree!
+        </h5>
+        <h6 class="grey-color text-center">
+          Track your documents in one place.
+        </h6>
+        <div class="p-5">Image here</div>
+        <h6 class="grey-color text-center mb-0 mt-2">
+          Get started by adding your first document.
+        </h6>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn modal-btn custom-btn main-color p-0"
+          style="font-size: 18px"
+          data-bs-dismiss="modal-info"
+          (click)="CloseModal()"
+        >
+          Got it
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</div>
+<div
+  class="modal fade"
+  id="docShareModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form
+        name="form"
+        (ngSubmit)="s.form.valid && shareDcument(s)"
+        #s="ngForm"
+        novalidate
+      >
+        <div class="modal-header modal-border">
+          <h5 class="modal-title">Document Sharing</h5>
+
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-floating">
+            <select
+              class="form-control username-input"
+              name="sharewith"
+              [(ngModel)]="shareDoc.UserId"
+              required
+              #sharewith="ngModel"
+            >
+              <option value="">Choose ...</option>
+
+              <option *ngFor="let obj of sharerUserList" [ngValue]="obj.UserId">
+                {{ obj.Name }}
+              </option>
+            </select>
+            <label for="floatingInput" class="label">Sharer</label>
+            <div
+              class="alert alert-danger"
+              role="alert"
+              *ngIf="sharewith.errors && s.submitted"
+            >
+              User is required!
+            </div>
+          </div>
+          <div class="form-floating">
+            <select
+              class="form-control username-input"
+              name="AccessTypeId"
+              [(ngModel)]="shareDoc.AccessTypeId"
+              required
+              #AccessTypeId="ngModel"
+            >
+              <option value="">Choose...</option>
+              <option *ngFor="let obj of AccessTypeList" [ngValue]="obj.Id">
+                {{ obj.Title }}
+              </option>
+            </select>
+            <label for="floatingInput" class="label">Access</label>
+            <div
+              class="alert alert-danger"
+              role="alert"
+              *ngIf="AccessTypeId.errors && s.submitted"
+            >
+              Access is required!
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between mt-2 mb-2 p-2">
+          <div>
+            <button
+              type="button"
+              class="btn fontWeight custom-btn"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+          </div>
+          <div class="">
+            <button type="submit" class="btn fontWeight custom-btn">
+              Share
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

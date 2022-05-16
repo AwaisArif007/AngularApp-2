@@ -1,0 +1,44 @@
+<div class="Main-container">
+  <h3>Files</h3>
+  <div class="files">
+    <table class="table">
+      <thead>
+        <tr class="table-tr">
+          <th class="padding" scope="col">Image</th>
+          <th class="padding" scope="col">Name</th>
+          <th class="padding" scope="col">Size</th>
+          <th class="padding" scope="col">Owner</th>
+          <th class="padding" scope="col">Document</th>
+          <th class="padding" scope="col">Date</th>
+          <th class="padding" scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of fileList" class="border-color">
+          <th scope="row">
+            <img src="assets/Images/add.png" class="padding" />
+          </th>
+
+          <td class="td-padding opacity">{{ i.FileName }}</td>
+
+          <td class="td-padding opacity">{{ i.Size }} kb</td>
+          <td class="td-padding opacity">{{ i.DocOwnerName }}</td>
+          <td class="td-padding document">{{ i.DocTypeName }}</td>
+          <td class="td-padding opacity">
+            {{ i.CreatedOn | date: "mediumDate" }}
+          </td>
+          <td>
+            <div
+              class="btn-group d-flex align-items-center action-padding opacity"
+            >
+              <h5 class="m-0">Actions</h5>
+              <button class="ms-2 custom-btn">
+                <i class="fa fa-angle-down"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
