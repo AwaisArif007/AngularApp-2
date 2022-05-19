@@ -7,6 +7,7 @@ import { DDLService } from 'src/app/Core/Services/Client/DDL/ddl.service';
 import { DocumentService } from 'src/app/Core/Services/Client/Document/document.service';
 import { FolderService } from 'src/app/Core/Services/Client/Folder/folder.service';
 import { Router } from '@angular/router';
+import { formatDate } from '@angular/common';
 
 
 
@@ -22,10 +23,10 @@ export class AddDocumentComponent implements OnInit {
 selectedDocType: any;
 selectedState: any;
 selectedCountry: any;
-
+PreviewFileName : any =[];
   addDocumentData = true;
   previewData = false;
-
+  isDisabledMonthsBefore=false;
 
 isRemindSessionShow=false;
 isRemindCustomShow=false;
@@ -57,7 +58,7 @@ AddDocumentData: any = {
   countryList: any = [];
   cityList: any = [];
   images : string[] = [];
-docTypeform: any = {
+    docTypeform: any = {
     Title: null,
   };
   CheckedSendOnList: any = [];
@@ -77,8 +78,7 @@ docTypeform: any = {
   ];
 
 
-
-   dataTableList: any = [];
+  dataTableList: any = [];
   form: any = {
     Name: null,
     UserId: null,
@@ -100,7 +100,34 @@ this.form.color="#BEEAFF";
     f.resetForm();
 
    }
-
+   addDays():void {
+     if(this.AddDocumentData.ValidForPeriod !=null && this.AddDocumentData.ValidFor!=null && this.AddDocumentData.IssueDate !=null)
+     {
+      if(this.AddDocumentData.ValidForPeriod=="Weeks")
+      {
+       const calculateDays=this.AddDocumentData.ValidFor * 7;
+       const calculateDate = new Date(this.AddDocumentData.IssueDate);
+       calculateDate.setDate(calculateDate.getDate() + calculateDays);
+       this.AddDocumentData.ExpiryDate=formatDate(calculateDate, 'yyyy-MM-dd', 'en_US');
+      }
+      else if(this.AddDocumentData.ValidForPeriod=="Years")
+      {
+       const calculateDays=this.AddDocumentData.ValidFor * 365;
+       const calculateDate = new Date(this.AddDocumentData.IssueDate);
+       calculateDate.setDate(calculateDate.getDate() + calculateDays);
+       this.AddDocumentData.ExpiryDate=formatDate(calculateDate, 'yyyy-MM-dd', 'en_US');
+      }
+      else if(this.AddDocumentData.ValidForPeriod=="Months")
+      {
+        const calculateDays=this.AddDocumentData.ValidFor * 30;
+        const calculateDate = new Date(this.AddDocumentData.IssueDate);
+        calculateDate.setDate(calculateDate.getDate() + calculateDays);
+        this.AddDocumentData.ExpiryDate=formatDate(calculateDate, 'yyyy-MM-dd', 'en_US');
+      }
+     
+     }
+ 
+  }
 
    CheckRemindOn(list:any){
     if(list.selected==true)
@@ -153,6 +180,7 @@ this.form.color="#BEEAFF";
     }
    selectFile(event: any): void {
     this.selectedFiles = event.target.files;
+    this.PreviewFileName = event.target.files;
     if (event.target.files && event.target.files[0]) {
       var filesAmount = event.target.files.length;
       for (let i = 0; i < filesAmount; i++) {
@@ -168,6 +196,8 @@ this.form.color="#BEEAFF";
   }
     
   }
+
+ 
   addDocument(): void {
 
     this.docSrvice.AddDocument(this.AddDocumentData,this.selectedFiles,this.CheckedSendOnList,this.CheckedRemindOnList).subscribe(
@@ -232,15 +262,26 @@ getDocTypeDLL(): void {
 }
 
 incrementCriteria(): void
-{ this.AddDocumentData.ReminderCustomCount=this.AddDocumentData.ReminderCustomCount + 1;
-  
- 
+{ 
+  if(this.AddDocumentData.ReminderCustomCount<52)
+  {
+    
+  this.AddDocumentData.ReminderCustomCount=this.AddDocumentData.ReminderCustomCount + 1;
+  if(this.AddDocumentData.ReminderCustomCount>=13)
+  {
+    this.isDisabledMonthsBefore=true;
+  }
+}
 }
 decrementCriteria(): void
 { 
   if(this.AddDocumentData.ReminderCustomCount>0)
   {
     this.AddDocumentData.ReminderCustomCount=this.AddDocumentData.ReminderCustomCount-1;
+  if(this.AddDocumentData.ReminderCustomCount<13)
+  {
+    this.isDisabledMonthsBefore=false;
+  }
   }
  
  

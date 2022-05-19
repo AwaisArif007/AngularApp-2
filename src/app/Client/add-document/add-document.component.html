@@ -49,6 +49,7 @@
                 [(ngModel)]="AddDocumentData.ExpiryDate"
                 required
                 #ExpiryDate="ngModel"
+                [min]="AddDocumentData.IssueDate"
               />
               <label for="floatingInput" class="label grey-color"
                 >Expiration Date
@@ -115,6 +116,8 @@
                 class="form-control username-input"
                 name="IssueDate"
                 [(ngModel)]="AddDocumentData.IssueDate"
+                [max]="AddDocumentData.ExpiryDate"
+                (change)="addDays()"
                 #IssueDate="ngModel"
               />
               <label for="floatingInput" class="label grey-color"
@@ -134,6 +137,8 @@
                 min="0"
                 [(ngModel)]="AddDocumentData.ValidFor"
                 #ValidFor="ngModel"
+                (keyup)="addDays()"
+                (change)="addDays()"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
               />
 
@@ -143,6 +148,7 @@
                 name="ValidForPeriod"
                 [(ngModel)]="AddDocumentData.ValidForPeriod"
                 #ValidForPeriod="ngModel"
+                (change)="addDays()"
               >
                 <option value="Years">Years</option>
                 <option value="Months">Months</option>
@@ -339,15 +345,9 @@
                   +
                 </button>
               </div>
-              <select
-                class="form-control username-input mx-3 reminder-input2"
-                name="ReminderCustomPeriod"
-                [(ngModel)]="AddDocumentData.ReminderCustomPeriod"
-                #ReminderCustomPeriod="ngModel"
-              >
-                <option value="Weeks">Weeks Before</option>
-
-                <option value="Months">Months Before</option>
+              <select class="form-control username-input mx-3 reminder-input2"  name="ReminderCustomPeriod" [(ngModel)]="AddDocumentData.ReminderCustomPeriod" #ReminderCustomPeriod="ngModel">
+                <option value="Weeks"  >Weeks Before</option>
+                <option value="Months" [disabled]="isDisabledMonthsBefore">Months Before</option>
               </select>
               <div class="select-action">
                 <i class="fa fa-angle-down"></i>
@@ -385,28 +385,17 @@
         <br />
 
         <div class="container-fluid mt-3 p-0">
+          
+         
           <div class="upload-files">
+            <input class="fileInput" type="file"  (change)="selectFile($event)" multiple/>
             <i class="fa-solid fa-arrow-up-from-bracket mt-5 mb-2"></i>
-            <h6 class="mb-5 grey-color">
-              Drag and drop files to here or
-              <span class="btn btn-file"
-                >browse
-                <input
-                  class="fileInput"
-                  type="file"
-                  (change)="selectFile($event)"
-                  multiple
-                />
-              </span>
-            </h6>
+            <h6 class="mb-5 grey-color"> Drag and drop files to here or<span class="btn btn-file" >browse</span></h6>
           </div>
         </div>
+      
         <div class="preview-cancel-btn">
-          <button
-            type="button"
-            class="cancel-btn"
-            routerLink="/client/dashboard"
-          >
+          <button type="button" class="cancel-btn" routerLink="/client/dashboard">
             Cancel
           </button>
           <button class="preview-btn" type="submit">Preview</button>
@@ -418,10 +407,7 @@
 
     <div *ngIf="previewData" class="preview-container">
       <h4>PREVIEW</h4>
-      <h6 class="mb-4">
-        You can always edit your document, create tasks and share with others
-        after you save it.
-      </h6>
+      <h6 class="mb-4"> You can always edit your document, create tasks and share with others after you save it.</h6>
 
       <div class="d-flex align-items-center w-100">
         <div class="underline"></div>
@@ -559,12 +545,7 @@
           </div>
           <div class="detail ps-5 p-2" *ngIf="CheckedRemindOnList.length > 0">
             <div class="d-flex justify-content-end">
-              <button
-                class="custom-btn edit-document"
-                (click)="onCancelPreview()"
-              >
-                Edit
-              </button>
+              <button class="custom-btn edit-document" (click)="onCancelPreview()">Edit</button>
             </div>
             <h4 class="inputLabel">Remind me at</h4>
             <div *ngFor="let obj of CheckedRemindOnList">
@@ -602,15 +583,11 @@
           </div>
           <div class="detail ps-5 p-2" *ngif="selectedFiles">
             <div class="d-flex justify-content-end">
-              <button
-                class="custom-btn edit-document"
-                (click)="onCancelPreview()"
-              >
+              <button class="custom-btn edit-document" (click)="onCancelPreview()">
                 Edit
               </button>
             </div>
-            <p class="inputValue">VA Driver License Renew.pdf</p>
-            <p class="inputValue">Current Driver License Image.jpg</p>
+            <p class="inputValue" *ngFor="let obj of PreviewFileName">{{obj.name}}</p>
           </div>
           <div class="detail ps-5 p-2" *ngIf="!selectedFiles">
             <p class="inputValue text-center">No Attachment</p>
