@@ -232,7 +232,11 @@ export class SettingsComponent implements OnInit {
         this.sharer.SharerId=response.Id;
        },
        (error: any) => {
-         this.toastr.error(error,"Error!!", );
+         if(error.status==404)
+         {
+          this.toastr.info("This email is not registered.You need to invite it.","Oops!!", );
+         }
+       
        }
  
      )

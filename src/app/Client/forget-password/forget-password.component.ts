@@ -32,6 +32,10 @@ forgetPass: any = {
         this.toastr.info("Plese check your email.","Info!!" );
         this.ClearForm(f);
        }
+       if(response==-1)
+       {
+        this.toastr.error("This email is not exist.","Oops!!" );
+       }
  
        },
        (error: any) => {

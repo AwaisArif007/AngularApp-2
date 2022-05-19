@@ -83,9 +83,7 @@ show_button: Boolean = false;
         },
         (error: any) => {
           this.toastr.error(error,"Error!!", );
-        }
-  
-      ) 
+        }) 
     }, error => console.log(error))
   }
   FacebookLogin():void {

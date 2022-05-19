@@ -50,9 +50,9 @@ export class ClientLayoutComponent implements OnInit {
       this.router.navigate(['/client/login']);
     }
     this.getNotifyDataTable();  
-    const connection = new signalR.HubConnectionBuilder()  
+  /*   const connection = new signalR.HubConnectionBuilder()  
       .configureLogging(signalR.LogLevel.Information)  
-      .withUrl('https://localhost:7107/notify',{
+      .withUrl('http://111.68.101.146/XpireeAPI/notify',{
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets
     })  
@@ -66,7 +66,7 @@ export class ClientLayoutComponent implements OnInit {
   
     connection.on("BroadcastMessage", () => {  
       this.getNotifyDataTable();  
-    });
+    }); */
   }
 
   logout(): void {

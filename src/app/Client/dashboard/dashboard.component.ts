@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrService } from 'ngx-toastr';
 import { TokenStorageService } from 'src/app/Core/Services/Client/token-storage.service';
-import { CalendarOptions } from '@fullcalendar/angular'; 
+import { CalendarOptions, DateSelectArg, EventClickArg, EventApi, EventInput, FullCalendarComponent  } from '@fullcalendar/angular'; 
 import { FolderService } from 'src/app/Core/Services/Client/Folder/folder.service';
 import { DashboardService } from 'src/app/Core/Services/Client/Dashboard/dashboard.service';
 import { DDLService } from 'src/app/Core/Services/Client/DDL/ddl.service';
@@ -22,17 +22,43 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class DashboardComponent implements OnInit {
   
 @ViewChild("content",{static:true}) content:ElementRef;
+@ViewChild('calendar', { static: false }) fullcalendar: FullCalendarComponent;
    
-  calendarOptions: CalendarOptions = {
+private month: number = new Date().getMonth()+1;
+public year = new Date().getFullYear();
+ExpiryDate="";
+calendarOptions: CalendarOptions = {
+  
+  initialView: 'dayGridMonth',
+  headerToolbar: {
+    right: 'prev,next',
+    left:'title',
+    },
+  editable: true,
+  customButtons: {
+      prev: {
+        text: '<',
+        click: this.getEventsByMonthBefore.bind(this)
+      },
+      next: {
+          text: '>',
+          click: this.getEventsByMonthAfter.bind(this)
+          }
+      } ,
       
-      initialView: 'dayGridMonth',
-      events: [
-        { title: 'event 1', date: '2022-04-01' ,color: 'purple'},
-        { title: 'event 2', date: '2022-04-04' }
-      ]
-    };
+      selectable: true,
+ /*  events: [
+    { title: 'event 1', date: '2022-05-31' ,color: 'purple'},
+    { title: 'event 2', date: '2022-04-04' }
+  ] */
+  
+};
+CalendarByMonth: any = {
+  year: null,
+  month: null
+  };
 
-   baseUrl= environment.API_URL;
+  baseUrl= environment.API_URL;
   isModalOpen = false;
   isMainopen = true;
   isCollapsed: boolean = true;
@@ -45,7 +71,6 @@ export class DashboardComponent implements OnInit {
   mytasks = false;
   showAddTask = false;
   showNewAssignTo=false;
-
   showModal = false;
   DisplayValidForPeriod='';
   isRemindSessionShow=false;
@@ -134,10 +159,13 @@ newSharer: any = {
  taskList: any = [];
  sharedDocList: any = [];
  docList: any = [];
-  constructor(private modalservice: NgbModal,private dashboardService: DashboardService,private ddlSrv:DDLService,private toastr: ToastrService,private router: Router) { }
+ username?: string;
+ 
+ constructor(private modalservice: NgbModal, private tokenStorageService: TokenStorageService,private dashboardService: DashboardService,private ddlSrv:DDLService,private toastr: ToastrService,private router: Router) { }
 
   ngOnInit(): void {
-    
+    const user = this.tokenStorageService.getUser();
+      this.username = user.userName;
     this.GetDashboardCounts();
     this.GetActiveDocDataTable();
     this.GetExpiringDocDataTable();
@@ -146,16 +174,78 @@ newSharer: any = {
 
   }
 
+  getEventsByMonthBefore() {
+    
+    this.month--;
+    if (this.month == -1) {
+    this.month = 11;
+    this.year--;
+    }
+    const monthString = this.month > 9 ? this.month.toString() : '0' + this.month.toString();
+    this.CalendarByMonth.year=this.year;
+    this.CalendarByMonth.month=this.month;
+    this.dashboardService.GetDocumentByMonth(this.CalendarByMonth.month)
+    .subscribe(
+      (response: any) => {
+        this.docList = response.result;
+        this.fullcalendar.getApi().removeAllEvents();
+        this.fullcalendar.getApi().changeView('dayGridMonth', this.year + '-' + monthString + '-01');
+        for (var v of response.result) {
+          this.ExpiryDate=formatDate(v.ExpiryDate, 'yyyy-MM-dd', 'en_US');
+        v.start = this.ExpiryDate.toString().replace(/T.$/, '');
+        v.end = this.ExpiryDate.toString().replace(/T.$/, '');
+        this.fullcalendar.getApi().addEvent(v);
+        }
+        this.fullcalendar.getApi().render();
+      }) 
+   
+  }
+  getEventsByMonthAfter() {
+    this.month++;
+    if (this.month == 12) {
+    this.month = 0;
+    this.year++;
+    }
+    const monthString = this.month > 9 ? this.month.toString() : '0' + this.month.toString();
+    this.CalendarByMonth.year=this.year;
+    this.CalendarByMonth.month=this.month;
+    this.dashboardService.GetDocumentByMonth(this.CalendarByMonth.month)
+    .subscribe(
+      (response: any) => {
+        this.docList = response.result;
+        this.fullcalendar.getApi().removeAllEvents();
+        this.fullcalendar.getApi().changeView('dayGridMonth', this.year + '-' + monthString + '-01');
+        for (var v of response.result) {
+          this.ExpiryDate=formatDate(v.ExpiryDate, 'yyyy-MM-dd', 'en_US');
+        v.start = this.ExpiryDate.toString().replace(/T.$/, '');
+        v.end = this.ExpiryDate.toString().replace(/T.$/, '');
+        this.fullcalendar.getApi().addEvent(v);
+        }
+        this.fullcalendar.getApi().render();
+      })
+  }
+
+  GetDocumentByMonth(): void {
+    this.CalendarByMonth.year=this.year;
+    this.CalendarByMonth.month=this.month;
+    this.dashboardService.GetDocumentByMonth(this.CalendarByMonth.month)
+    .subscribe(
+      (response: any) => {
+        this.docList = response.result;
+        this.fullcalendar.getApi().removeAllEvents();
+        for (var v of response.result) {
+          this.ExpiryDate=formatDate(v.ExpiryDate, 'yyyy-MM-dd', 'en_US');
+        v.start = this.ExpiryDate.toString().replace(/T.$/, '');
+        v.end = this.ExpiryDate.toString().replace(/T.$/, '');
+        this.fullcalendar.getApi().addEvent(v);
+        }
+        this.fullcalendar.getApi().render();
+      }) 
+    }
   CloseModal():void{
      this.modalservice.dismissAll();
   }
-  GetDocumentByMonth(): void {
-    this.dashboardService.GetDocumentByMonth(5)
-              .subscribe(
-                (response: any) => {
-                  this.docList = response.result;
-                }) 
-    }
+ 
   GetDashboardCounts(): void {
   this.dashboardService.GetDashboardCounts()
             .subscribe(
@@ -420,8 +510,8 @@ newSharer: any = {
     this.dashboardService.GetDocumentById(this.DocumentData.Id).subscribe(
         (response: any) => {
           this.DocumentData = response.result;
-         this.DocumentData.ExpiryDate = formatDate(new Date(), 'yyyy-MM-dd', 'en_US');
-         this.DocumentData.IssueDate = formatDate(new Date(), 'yyyy-MM-dd', 'en_US');
+         this.DocumentData.ExpiryDate = formatDate(this.DocumentData.ExpiryDate, 'yyyy-MM-dd', 'en_US');
+         this.DocumentData.IssueDate = formatDate(this.DocumentData.IssueDate, 'yyyy-MM-dd', 'en_US');
          this.DisplayValidForPeriod=this.DocumentData.ValidForPeriod;
          this.DocumentData.RemindMe=true;
          this.ChangeRemindMe(this.DocumentData.RemindMe);

@@ -10,7 +10,11 @@ h3 {
   flex-wrap: wrap;
   margin-top: 2rem;
 }
-
+ul.no-bullets {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
 .content {
   background-color: #ffffff;
   margin-left: 4rem;

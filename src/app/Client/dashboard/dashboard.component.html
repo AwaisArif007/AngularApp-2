@@ -267,7 +267,7 @@
                     <div class="title">
                       <h2 class="fontWeight">{{ i.DocName }}</h2>
                       <span class="icon">
-                        <a href="" (click)="onShowDocumentDetails(i.Id)"><img src="assets/icons/1x/list.png" /></a>
+                        <a style="cursor:pointer;" (click)="onShowDocumentDetails(i.Id)"><img src="assets/icons/1x/list.png" /></a>
                         
                         <i class="fa-solid fa-share" style="margin-left: 7px; margin-right: 7px"></i>
                         <i class="fa-solid fa-bookmark"></i>
@@ -302,7 +302,7 @@
                     <div class="title">
                       <h2 class="fontWeight">{{ i.DocName }}</h2>
                       <span class="icon">
-                        <a href="" (click)="onShowDocumentDetails(i.Id)"><img src="assets/icons/1x/list.png" /></a>
+                        <a style="cursor:pointer;" (click)="onShowDocumentDetails(i.Id)"><img src="assets/icons/1x/list.png" /></a>
                         
                         <i class="fa-solid fa-share" style="margin-left: 7px; margin-right: 7px"></i>
                         <i class="fa-solid fa-bookmark"></i>
@@ -338,7 +338,7 @@
                       <h2 class="fontWeight">{{ i.DocName }}</h2>
                       <span class="icon">
                         <a style="cursor:pointer;" (click)="onShowDocumentDetails(i.Id)"><img src="assets/icons/1x/list.png" /></a>
-                        <a style="cursor:pointer;" (click)="onShowDocumentDetails(i.Id)"><i  class="fa-solid fa-share" style="margin-left: 7px; margin-right: 7px"></i></a>
+                        <a style="cursor:pointer;" ><i  class="fa-solid fa-share" style="margin-left: 7px; margin-right: 7px"></i></a>
                         <a style="cursor:pointer;" *ngIf="i.Isbookmark==true"  (click)="addBookmark(i.Id,false)"><i  class="fa-solid fa-bookmark"></i></a>
                         <a style="cursor:pointer;" *ngIf="i.Isbookmark==false" (click)="addBookmark(i.Id,true)"><i  class="far fa-bookmark"></i></a>
                         
@@ -1150,7 +1150,7 @@
                     *ngFor="let obj of assignUserList"
                     (click)="AssignedToFilter(obj.UserId)"
                   >
-                    Assigned to {{ obj.Name }}
+                  {{ obj.Name }}
                   </button>
                 </div>
 
@@ -1478,7 +1478,7 @@
         class="modal-body d-flex flex-column align-items-center justify-content-center"
       >
         <h5 class="modal-title mb-2 text-center main-color">
-          Trinity, Welcome to Xpiree!
+          {{username}}, Welcome to Xpiree!
         </h5>
         <h6 class="grey-color text-center">
           Track your documents in one place.

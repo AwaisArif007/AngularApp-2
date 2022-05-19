@@ -48,7 +48,7 @@ FullCalendarModule.registerPlugins([
           provider: new GoogleLoginProvider(
             '336652231123-uu8rteb68883qq2bh2aigf91i1l9tt1k.apps.googleusercontent.com'
           )
-        },
+        }, 
         {
           id: FacebookLoginProvider.PROVIDER_ID,
           provider: new FacebookLoginProvider('510713097265176')
